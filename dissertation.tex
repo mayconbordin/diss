@@ -137,16 +137,16 @@ This chapter introduces the concepts that govern Stream Processing Systems (SPSs
 
 In sequence, the architectural aspects of SPSs are explored, including tecniques for scheduling and load balancing jobs and tasks within jobs to Processing Elements (PEs) (Section \ref{sec:esp:scheduling_load_balancing}), the methods employed for guaranteeing that messages are processed and the operator's state is not lost in a failure (Section \ref{sec:esp:fault_tolerance}), as well as the different data transportation middlewares and communication patterns used (Section \ref{sec:esp:data_transport}).
 
-In Section \ref{sec:esp:platforms}, the main platforms for stream processing are described in detail, with the differeces among them being highlighted. And lastly, the state of the art on benchmarking and performance evaluation of SPSs is investigated (Section \ref{sec:esp:performance_evaluation}).
+In Section \ref{sec:esp:platforms}, the main platforms for stream processing are described in detail, with the differences among them being highlighted. And lastly, the state of the art on benchmarking and performance evaluation of SPSs is investigated (Section \ref{sec:esp:performance_evaluation}).
 
 \section{Requirements}
 \label{sec:esp:requirements}
 
-Stream processing technologies have been created to fulfil a set of requirements for a growing class of applications. Among these requirements, the most proeminent is the need for processing data in real time (or near real-time) and producing results in a timely fashion.
+Stream processing technologies have been created to fulfill a set of requirements for a growing class of applications. Among these requirements, the most proeminent is the need for processing data in real time (or near real-time) and producing results in a timely fashion.
 
 In a paper by Stonebraker, {\c{C}}etintemel and Zdonik \cite{stonebraker20058}, they also include as requirements the need to process data \emph{in-memory} in order to keep the latency low (1), the support for a high-level query language (2), the ability to handle data imperfections (delays, missing and out-of-order data)(3), the generation of predictable and repeatable outcomes (4), the integration of real-time and stored data (5), the guaratee of data safety and system availability (6), the automatic partition and scalability of applications (7), and the last requirement is the one mentioned in the beginning of this section.
 
-To complement the requirements above, Chakravarthy \cite{chakravarthy2009stream} also notes that an SPS has to be able to cope with the unpredicability of data stream rates and also the large amount of data that may be required to be processed. Many applications have also very specific QoS requiremets that must be met, such as response time (latency), precision, throughput and memory usage. The precision is regarding the results, which means that some applications are willing to have approximate results in order to increase or sustain other QoS requirement.
+To complement the requirements above, Chakravarthy \cite{chakravarthy2009stream} also notes that an SPS has to be able to cope with the unpredicability of data stream rates and also the large amount of data that may be required to be processed. Many applications have also very specific QoS requirements that must be met, such as response time (latency), precision, throughput and memory usage. The precision is regarding the results, which means that some applications are willing to have approximate results in order to increase or sustain other QoS requirement.
 
 
 \section{Concepts}
@@ -200,14 +200,14 @@ In stream processing an application is usually composed as a flow graph with nod
 
 \begin{itemize}
 \item DAG (Directed Acyclic Graph): a directed graph without cycles.
-\item Actors model: an actor is a computational etity that can respond to a message by sending messages to other actors, creating new actors and designating the bahavior for the next message it receives, all in parallel.
+\item Actors model: an actor is a computational entity that can respond to a message by sending messages to other actors, creating new actors and designating the bahavior for the next message it receives, all in parallel.
 \item Monad: originated from functional programming, it is a structure that represents a chain of operations.
 \end{itemize}
 
 % Parallelism
-The parallelism of SPAs (Figure \ref{fig:sps_parallelism}) can be expressed in three ways: \emph{pipeline}, \emph{data} or \emph{task parallelism}. The \emph{pipeline parallelism} works similarly to the way a CPU processes instructions, with instructions being analogous to operators. In order to task parallelism to work properly an application must have the right level of decomposition, in order to accomplish a good usage of computational resources.
+The parallelism of SPAs (Figure \ref{fig:sps_parallelism}) can be expressed in three ways: \emph{pipeline}, \emph{data} or \emph{task parallelism}. The \emph{pipeline parallelism} works similarly to the way a CPU processes instructions, with instructions being analogous to operators. In order for task parallelism to work properly an application must have the right level of decomposition, in order to accomplish a good usage of computational resources.
 
-\emph{Data parallelism} consists on the execution of the same task over different data items or Single Instruction Multiple Data (SIMD). This type of parallelism depends on the nature of the operator: \emph{stateless}, \emph{partitioned-stateful} or \emph{stateful}. Obviously, the simpler case lies in the \emph{stateless} operators, because the workload can be evenly distributed among their instances without any worries about dependencies between tuples. With \emph{partitioned-stateful} operators, however, some sort of consistency must be followed when splitting a data stream among an operator's instances. With \emph{stateful} operators simply choosing a partitioning configuration is not enough, it usualy involves operators dedicated specifically for splitting, merging and re-ordering the tuples.
+\emph{Data parallelism} consists on the execution of the same task over different data items or Single Instruction Multiple Data (SIMD). This type of parallelism depends on the nature of the operator: \emph{stateless}, \emph{partitioned-stateful} or \emph{stateful}. Obviously, the simpler case lies in the \emph{stateless} operators, because the workload can be evenly distributed among their instances without any worries about dependencies between tuples. With \emph{partitioned-stateful} operators, however, some sort of consistency must be followed when splitting a data stream among an operator's instances. With \emph{stateful} operators simply choosing a partitioning configuration is not enough, it usually involves operators dedicated specifically for splitting, merging and re-ordering the tuples.
 
 The most common partitioning configurations are:
 
@@ -262,7 +262,7 @@ Among the first SPSs developed the most notable are the TelegraphCQ, developed a
 
 The \emph{second generation} went a step further, with systems working on very large networks, mainly for processing data from sensor networks, which means that the processing must occur in a distributed fashion.
 
-In this period a lot of research was built on all aspects surrounding SPSs, such as job and resource management, scheduling, load balancing, high availability, monitoring, fault tolerance, QoS, visualization, stream algorithms and query languages. In comparison with the the first geeration, now the systems have a much wider range of operators, as well as the hability to built custom operators.
+In this period a lot of research was built on all aspects surrounding SPSs, such as job and resource management, scheduling, load balancing, high availability, monitoring, fault tolerance, QoS, visualization, stream algorithms and query languages. In comparison with the the first geeration, now the systems have a much wider range of operators, as well as the hability to build custom operators.
 
 In the \emph{third generation} there is a shift towards massively-parallel systems, working on clusters instead of very large networks. These systems also favor general purpose languages instead of DSLs (Domain Specific Languages), giving the developer a wide range of possibilities for building applications. The focus is now on processing large volumes of data as fast as possible using clusters of computing nodes, usually with Cloud Computing.
 
@@ -285,7 +285,7 @@ In an SPS, the operators of a query will be spread across multiple computing nod
 
 The processing graph is considered the logical representation of the query which will be used by the scheduler in the placement of operators. The mapping of operators to computing nodes will create the physical representation of the query, where the vertices now represent the nodes \cite{kossmann2000state, lei2012robust}.
 
-One of the main differences in the way the scheduler works depends on the type of \textbf{load partitioning} supported by the system \cite{johnson2008query}. \textbf{Data stream partitioning} allows an operator to be placed in several nodes, distributing the load among them. Whereas in \textbf{query plan partitioning} one operator can live only in one node, with the disavantage that if an operator consumes more resources that a machine can offer, the only solution is to upgrade the machine or apply some technique of admission control.
+One of the main differences in the way the scheduler works depends on the type of \textbf{load partitioning} supported by the system \cite{johnson2008query}. \textbf{Data stream partitioning} allows an operator to be placed in several nodes, distributing the load among them. Whereas in \textbf{query plan partitioning} one operator can live only in one node, with the disavantage that if an operator consumes more resources then a machine can offer, the only solution is to upgrade the machine or apply some technique of admission control.
 
 Following the taxonomy defined by Casavant and Kuhl \cite{casavant1988taxonomy} another important aspect of schedulers for DSPSs is the time at which the operator placement is made (\textbf{statically} or \textbf{dynamically}). Giving the variable nature of data streams most schedulers proposed in the literature approach the problem with a initial operator placement and an online load balancing, with special attention to the management of bursts.
 
@@ -293,7 +293,7 @@ More recently a taxonomy was proposed \cite{lakshmanan2008placement} specificall
 
 \begin{itemize}
     \item \textbf{Architecture}: whether is an \emph{independent module} from the system, a \emph{distributed} one with each node executing an instance of it, or an \emph{hybrid} of both approaches.
-    \item \textbf{Algorithm Structure}: if the algorith has knowledge of the entire network's state it is \emph{centralized}, otherwise it is \emph{descentralized}, using only local knowledge to make decisions.
+    \item \textbf{Algorithm Structure}: if the algorithm has knowledge of the entire network's state it is \emph{centralized}, otherwise it is \emph{descentralized}, using only local knowledge to make decisions.
     \item \textbf{Metrics}: used in the objective functions in order to optimize the placement of operators. Commonly used metrics are the \emph{load}, \emph{latency}, \emph{bandwidth}, \emph{machine resources} and \emph{operator importance}.
     \item \textbf{Operator-Level Operations}: describes the operations supported by the operators in order to improve the performance of the operator placement algorithm, such as reusing an operator that appears in more than one query (\emph{operator reuse}) and replicating one operator to improve the performance (\emph{replication}).
     \item \textbf{Reconfiguration}: ability of the algorithm to adapt in order to cope with changes in the network, input rate or application components.
@@ -308,7 +308,7 @@ Fault tolerance in SPSs is of utmost importance due to the fact that its applica
 
 It has to guarantee that the state of the system is consistent and that all messages received are processed. In order to accomplish that some techniques can be employed. In the next paragraphs the main techniques, according to Gradvohl et al \cite{gradvohl2014comparing}, will be described.
 
-\textbf{Replication of components}, as the name suggests consists of replicating a component of the system so that in case of a failure the replicated component can take over the failed one. The replication can happen \emph{actively}, meaning that the replicated component receives the same input as the main component, and in case of a failure the replicated component can take over immediately. The drawback is that the cost of the component is also duplicated. The other approach is the \emph{passive} replication, and in this case the replicated component is dormant, and in case of a failure all the input processed by the failed component has to replayed to the replicated component. Depending on the size of the input to be replayed the time required for the component to reach the same state as the failed component can be intolerable. To overcome this, the technique that will be described next can be used.
+\textbf{Replication of components}, as the name suggests consists of replicating a component of the system so that in case of a failure the replicated component can take over the failed one. The replication can happen \emph{actively}, meaning that the replicated component receives the same input as the main component, and in case of a failure the replicated component can take over immediately. The drawback is that the cost of the component is also duplicated. The other approach is the \emph{passive} replication, and in this case the replicated component is dormant, and in case of a failure all the input processed by the failed component has to be replayed to the replicated component. Depending on the size of the input to be replayed the time required for the component to reach the same state as the failed component can be intolerable. To overcome this, the technique that will be described next can be used.
 
 \begin{figure}[!ht]
 	\centering
@@ -335,11 +335,13 @@ It has to guarantee that the state of the system is consistent and that all mess
 \section{Message Systems}
 \label{sec:esp:data_transport}
 
-According to Bockermann \cite{bockermann2014survey} a \emph{queueing} or \emph{message passing} component is one of the two main functionalities of an SPS, the other being the \emph{execution engine} itself. The message system will be responsible for connection the components of an SPS, transporting tuples from producers to consumers, ensuring that the connections are fault-tolerant and are performing well regarding throughput and latency \cite{andrade2014fundamentals}.
+According to Bockermann \cite{bockermann2014survey} a \emph{queueing} or \emph{message passing} component is one of the two main functionalities of an SPS, the other being the \emph{execution engine} itself. The message system will be responsible for connecting the components of an SPS, transporting tuples from producers to consumers, ensuring that the connections are fault-tolerant and are performing well regarding throughput and latency \cite{andrade2014fundamentals}.
 
 Systems such as S4 used to rely solely on TCP, changing later to the Netty library. Storm did something similar, changing from ZeroMQ to Netty. And while these systems rely on libraries to handle their communication, some systems prefer to use a middleware, as is the case of Apache Samza which uses Kafka as its message system. Other examples of middlewares are RabbitMQ and ActiveMQ.
 
 Kafka, middlewares (netty), etc.
+
+% REVISION::HERE
 
 \section{Platforms}
 \label{sec:esp:platforms}
