@@ -341,12 +341,10 @@ Systems such as S4 used to rely solely on TCP, changing later to the Netty libra
 
 Kafka, middlewares (netty), etc.
 
-% REVISION::HERE
-
 \section{Platforms}
 \label{sec:esp:platforms}
 
-In this section the most proeminent SPSs in the open source market are described. It is assumed that the basic concepts of stream processing are known (Section \ref{sec:esp:concepts}). The descriptions focuses mainly o programming and archtiectural characteristics. At the last section there is a qualitative comparison of the platforms, highlighting their similarities and differences.
+In this section the most proeminent SPSs in the open source market are described. It is assumed that the basic concepts of stream processing are known (Section \ref{sec:esp:concepts}). The descriptions focuses mainly o programming and architectural characteristics. At the last section there is a qualitative comparison of the platforms, highlighting their similarities and differences.
 
 \subsection{Storm}
 
@@ -382,7 +380,7 @@ In Figure \ref{fig:storm_running_topology} it is possible to see an example of a
 	\label{fig:storm_running_topology}
 \end{figure}
 
-A Storm cluster (Figure \ref{fig:storm_cluster}) is composed of one \emph{Nimbus} (the master) and a set of \emph{supervisors} (the workers). The Nimbus is resposible for assigning work to supervisors, which start and stop workers accordingly; managing failures; and monitoring resource usages \cite{heinze2014cloud}. Supervisors have a parameter called \emph{slots}, which is the maximum number of workers that they can execute \cite{aniello2013adaptive}. The coordination between the Nimbus and the supervisors relies on a Zookeeper cluster. Moreover, all state of the nodes is kept on Zookeeper in order to avoid data loss in case of a failure, enabling nodes to restart after a failure and continue from where they left off \cite{storm2015docs}.
+A Storm cluster (Figure \ref{fig:storm_cluster}) is composed of one \emph{Nimbus} (the master) and a set of \emph{supervisors} (the workers). The Nimbus is resposible for assigning work to supervisors, as well as starting and stopping workers accordingly; managing failures; and monitoring resource usages \cite{heinze2014cloud}. Supervisors have a parameter called \emph{slots}, which is the maximum number of workers that they can execute \cite{aniello2013adaptive}. The coordination between the Nimbus and the supervisors relies on a Zookeeper cluster. Moreover, all state of the nodes is kept on Zookeeper in order to avoid data loss in case of a failure, enabling nodes to restart after a failure and continue from where they left off \cite{storm2015docs}.
 
 \begin{figure}[!ht]
 	\centering
@@ -413,7 +411,7 @@ Storm guarantees that all messages emitted by the spouts will be fully processed
 
 S4 is a framework for distributed stream processing based on the Actors model. Applications are built as a graph composed of \emph{processing elements} (PEs) that process events and \emph{streams} that interconnect the PEs. Events are made of a key and a set of attributes, and they are forwarded to a PE based on the value of the key, with exception of \emph{keyless} PEs.
 
-In fact, the parallelism of S4 is based on event keys. Each key value will create a new instance of an PE, meaning that large key domains will generate a large number of PE instances. An S4 application is deployed in an \emph{S4 cluster} composed of containers called \emph{S4 nodes} (see Figure \ref{fig:s4_structure}) that execute PEs from multiple applications. These nodes are coordinated using Apache Zookeeper and the communication between nodes happens through TCP connections. One drawback of S4 is that a cluster has a fixed number of nodes, meaning that to create a cluster with more node it is necessary to create a new S4 cluster.
+In fact, the parallelism of S4 is based on event keys. Each key value will create a new instance of an PE, meaning that large key domains will generate a large number of PE instances. An S4 application is deployed in an \emph{S4 cluster} composed of containers called \emph{S4 nodes} (see Figure \ref{fig:s4_structure}) that execute PEs from multiple applications. These nodes are coordinated using Apache Zookeeper and the communication between nodes happens through TCP connections. One drawback of S4 is that a cluster has a fixed number of nodes, meaning that to create a cluster with more nodes it is necessary to create a new S4 cluster.
 
 \begin{figure}[!ht]
 	\centering
@@ -422,13 +420,13 @@ In fact, the parallelism of S4 is based on event keys. Each key value will creat
 	\label{fig:s4_structure}
 \end{figure}
 
-Regarding fault tolerance, S4 detects node failures using Zookeeper and reassign tasks to other nodes \cite{bockermann2014survey}, passive stand-by processing nodes to be exact, technique called \emph{lossy failover} \cite{kamburugamuvesurvey}. The message semantics guarantees only \emph{at-most-once} processing, which means that events may be lost as no buffering or acknowledgement of events is provided (\emph{gap recovery}).
+Regarding fault tolerance, S4 detects node failures using Zookeeper and reassign tasks to other nodes \cite{bockermann2014survey}, passive stand-by processing nodes to be exact, a technique called \emph{lossy failover} \cite{kamburugamuvesurvey}. The message semantics guarantees only \emph{at-most-once} processing, which means that events may be lost as no buffering or acknowledgement of events is provided (\emph{gap recovery}).
 
 S4 does however have a state management mechanism that periodically checkpoints the state of PEs to a backend storage. In case of a failure the reassigned task will load the last checkpointed state.
 
 \subsection{Spark Streaming}
 
-Spark Streaming is a \emph{stateful} distributed stream processing system, part of the Apache Spark ckuster computing framework. One key difference of this platform is the way it handles data streams, with events being processed in \emph{batches} of fixed time intervals instead of a \emph{record-at-a-time} \cite{spark2015docs}.
+Spark Streaming is a \emph{stateful} distributed stream processing system, part of the Apache Spark cluster computing framework. One key difference of this platform is the way it handles data streams, with events being processed in \emph{batches} of fixed time intervals instead of a \emph{record-at-a-time} \cite{spark2015docs}.
 
 Batches are also treated as \emph{Resilient Distributed Datasets} (RDDs), a data structure that keeps data in memory and can be recovered without the need of replication. Instead it tracks the \emph{lineage graph} of operations applied in order to build it, something possible since the computations are deterministic \cite{zaharia2013discretized}.
 
@@ -445,7 +443,7 @@ An application is what can be called a \emph{D-Stream Graph}, analogous to the d
 	\label{fig:s4_structure}
 \end{figure}
 
-Spark Streaming can recover from failures by using RDDs. The input data is replicated in memory and in case of a failure and RDD partition can be recomputed by applying the transformations that built it to the input data. It also checkpoints the state of RDDs periodically to an external storage (e.g. HDFS), and the recovery can be performed in parallel.
+Spark Streaming can recover from failures by using RDDs. The input data is replicated in memory and in case of a failure an RDD partition can be recomputed by applying the transformations that built it to the input data. It also checkpoints the state of RDDs periodically to an external storage (e.g. HDFS), and the recovery can be performed in parallel.
 
 \begin{figure}[ht]
     \centering
@@ -466,7 +464,7 @@ Spark Streaming can recover from failures by using RDDs. The input data is repli
 
 Its architecture (Figure \ref{fig:spark_architecture} \subref{fig:spark_architecture_components}) consists of three main components: a \textbf{master} that manages the lineage graph of D-Streams and schedules tasks to compute new RDD partitions; the \textbf{worker nodes} that receive data, store the partitions of input and computed RDDs and execute tasks; and the \textbf{client library} that sends the data into the system.
 
-In Spark the component responsible for receiving data from the network is the \emph{Network Receiver} (Figure \ref{fig:spark_architecture} \subref{fig:spark_architecture_exec_model}), when it receives data it lauches tasks in the workers in order for transfer it to them. The \emph{Receiver} then push the data blocks to the \emph{Block Manager}, the block will also be replicated and the Receiver will notify the master that the blocks have been received and send to the \emph{Block Manager Master} the location of the block IDs.
+In Spark the component responsible for receiving data from the network is the \emph{Network Receiver} (Figure \ref{fig:spark_architecture} \subref{fig:spark_architecture_exec_model}), when it receives data it launches tasks in the workers in order for transfer it to them. The \emph{Receiver} then push the data blocks to the \emph{Block Manager}, the block will also be replicated and the Receiver will notify the master that the blocks have been received and send to the \emph{Block Manager Master} the location of the block IDs.
 
 The \emph{Job Scheduler} (Figure \ref{fig:spark_architecture} \subref{fig:spark_architecture_scheduling}) periodically queries the D-Stream graph in order to create the jobs for the received data for the batch intervals. These jobs are stored in a queue by the \emph{Job Manager}, also responsible for sending them to the Spark Scheduler for execution in the worker nodes.
 
@@ -475,7 +473,7 @@ The \emph{Job Scheduler} (Figure \ref{fig:spark_architecture} \subref{fig:spark_
 
 Samza is a framework for distributed stream processing built around Kafka. In Samza an operator is a \emph{job}, it can subscribe and publish to one or more streams. The parallelism is defined by the number of partitions of the Kafka's topic that the job subcribes to (if multiple topics, the one with more partitions). 
 
-A job is then broken down into \emph{tasks}, each one responsible for consuming data from one or more partitions, that operate independently of each other \cite{ramesh2015samza}. These taks will be executed by \emph{Task Runners}.
+A job is then broken down into \emph{tasks}, each one responsible for consuming data from one or more partitions, that operates independently of each other \cite{ramesh2015samza}. These tasks will be executed by \emph{Task Runners}.
 
 As a job is the equivalent of a single operator, more complex data flows can be created by submitting more jobs to Samza, connected only by their input and output streams. This particular characteristic makes it possible to change a data flow without stopping the application.
 
@@ -505,13 +503,13 @@ Regarding state management, Samza provides its own data-store (e.g. LevelDB or R
 
 \subsection{Comparison}
 
-In this section the platforms described above will be compared regarding their main characteristics. These platforms were selected in particularly because they all belong to the third generation of SPSs, they are focused on processing large volumes of data ("Big Data"), they are all open source, which means that the details under the hood are available for study, and they have gathered momentum over the last few years (with exception of S4, which is slowly fading away from the market).
+In this section the platforms described above will be compared regarding their main characteristics. These platforms were selected in particular because they all belong to the third generation of SPSs, they are focused on processing large volumes of data ("Big Data"), they are all open source, which means that the details under the hood are available for study, and they have gathered momentum over the last few years (with exception of S4, which is slowly fading away from the market).
 
 Table \ref{table:sps_comparison} summarizes the main characteristics of these platforms. These characteristics were found in the documentation of the respective platforms and in previous works \cite{bockermann2014survey, gradvohl2014comparing, kamburugamuvesurvey} that compared some of these platforms.
 
 Most of the characteristics used for the comparison have been described in Section \ref{sec:esp:concepts}, considering that they are some of the building blocks of SPSs. Others however, are more specific or technical and as such they will be detailed in the following paragraphs.
 
-The \textbf{distributed cluster} characteristic refers to the support of the platform for working in a multiple computers as a distributed system, something that all the platforms compared have. Directly related to the previous characteristic, the \textbf{stream partitioning} represents the data partitioning features of the platforms, something necessary in order to parallelize SPAs among nodes in a cluster. The difference is the way the partitioning is implemented, and among these platforms Storm is the one with the widest range of options.
+The \textbf{distributed cluster} characteristic refers to the support of the platform for working in multiple computers as a distributed system, something that all the platforms compared have. Directly related to the previous characteristic, the \textbf{stream partitioning} represents the data partitioning features of the platforms, something necessary in order to parallelize SPAs among nodes in a cluster. The difference is the way the partitioning is implemented, and among these platforms Storm is the one with the widest range of options.
 
 \textbf{Rebalacing} is the capacity to rebalance the executing processes among the computing nodes in order to cope with changes in the load. Together with a \textbf{dynamic cluster}, i.e. the ability to add new nodes to a running cluster, it is possible to scale an application as it requires more resources in order to honor the application's QoS requirements.
 
@@ -564,6 +562,7 @@ The \textbf{delivery guarantees} on the other hand are closely related to the \t
 \end{center}
 \end{table}
 
+% REVISION::HERE
 
 \section{Performance Evaluation}
 \label{sec:esp:performance_evaluation}
