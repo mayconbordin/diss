@@ -607,7 +607,6 @@ In an evaluation of the performance of Apache S4 \cite{chauhan2012performance} a
 
 For MillWheel \cite{akidau2013millwheel}, a distributed and fault tolerant SPS developed at Google, the main metric used to evaluate it is the latency. Regarding its scalability, they look at the median, 95th and 99th percentiles. Results show that while the latency median remains almost unchanged, the tail gets longer.
 
-
 % REVISION::HERE
 
 Another distributed SPS called TimeStream \cite{qian2013timestream} is evaluated regarding its scalability, fault tolerance, consistency and adaptability to load dynamics. TimeStream packs events into batches for transportation, by varying the batch size they measure the maximum throughput and latency with a distinct count application. They pick five batch sizes and measure the throughput and latency with different number of computing nodes and compare it with Apache Storm. In a sentiment analysis application they use a dataset of 1.2 billion tweets, feeding the system at a rate of 600 tweets/s in average, with a peak of 2,000 tweets/s. To evaluate the fault tolerance of TimeStream the authors use same two applications. With the distinct count they only inject a failure in one of the computing nodes and observe the recovery time for different window sizes and checkpointing intervals. For the sentiment analysis application they inject failures by selecting operators that form a chain in the DAG and killing one, three or the whole chain of operators and measuring the recovery time for each operator.
