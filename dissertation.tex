@@ -562,8 +562,6 @@ The \textbf{delivery guarantees} on the other hand are closely related to the \t
 \end{center}
 \end{table}
 
-% REVISION::HERE
-
 \section{Performance Evaluation}
 \label{sec:esp:performance_evaluation}
 
@@ -597,7 +595,7 @@ As most of the works below, they chose the \textbf{average} \emph{throughput} an
 
 In a study conducted in 2011 \cite{dayarathna2011performance} the scalability of Apache S4 and System S is compared using three applications (CDR, VWAP and trending topics) plus a micro-benchmark. They measure the throughput with 1, 2, 4, 6, 8 and 12 nodes. In all scenarios System S is superior, but the authors don't disclose if the throughput is the average, the maximum or minimum, or some percentile.
 
-In a latter work by the same authors \cite{dayarathna2013performance}, they evaluate the performance of Apache S4, System S and Esper using the same applications as in their previous work analysing, beyond the throughput, the resource usage of these systems. The authors took care of modifying the applications in order to give a fair comparison between the systems. The throughput was measured in two ways: for Apache S4 and Esper they measured the time required to process a certain number of tuples, while in System S the throughput was computed over the time to process the whole dataset. The experiments were repeated three times for each combination of factors, and the average was used to calculate the throughput. The CPU, memory and network usages are retrieved using Nmon and Oprofiler.
+In a latter work by the same authors \cite{dayarathna2013performance}, they evaluate the performance of Apache S4, System S and Esper using the same applications as in their previous work analysis, beyond the throughput, the resource usage of these systems. The authors took care of modifying the applications in order to give a fair comparison between the systems. The throughput was measured in two ways: for Apache S4 and Esper they measured the time required to process a certain number of tuples, while in System S the throughput was computed over the time to process the whole dataset. The experiments were repeated three times for each combination of factors, and the average was used to calculate the throughput. The CPU, memory and network usages are retrieved using Nmon and Oprofiler.
 
 Although the last work is recent, it left out Storm, which is one of the most popular SPS. At that time other systems, such as Spark Streaming, Samza and Dempsy were just in its infancy, but it means that there is no comparison between these systems in the literature, nor even in white papers or technical reports.
 
@@ -608,6 +606,9 @@ In the Spark Streaming platform \cite{zaharia2012discretized} they measure the m
 In an evaluation of the performance of Apache S4 \cite{chauhan2012performance} a single application is used to observe its scalability, resource usage and fault tolerance. For the scalability analysis they use as factors the number of nodes in the cluster (1 to 3), data size (10 and 100 megabytes), input rate (500 and 1000 events/sec), and number of keys. The metrics are the total number of events processed (50k times number of keys) and the number of events lost. They do not use runtime as a metric because an under provisioned setup would lead to high tuple loss and small runtimes, giving the false impression that using one node is better than two or more. The resource usage is depicted for each node of the cluster with the CPU and memory usage, while the network usage is summarized for the whole cluster and measured in packets per second. The experiments that evaluate the fault tolerance of Apache S4 were conducted by killing one (in a 2-node and 3-node cluster) and two (in a 3-node cluster) nodes leading, as expected, to a reduction in throughput, overwhelming the remaining nodes and thus leading to higher tuple losses.
 
 For MillWheel \cite{akidau2013millwheel}, a distributed and fault tolerant SPS developed at Google, the main metric used to evaluate it is the latency. Regarding its scalability, they look at the median, 95th and 99th percentiles. Results show that while the latency median remains almost unchanged, the tail gets longer.
+
+
+% REVISION::HERE
 
 Another distributed SPS called TimeStream \cite{qian2013timestream} is evaluated regarding its scalability, fault tolerance, consistency and adaptability to load dynamics. TimeStream packs events into batches for transportation, by varying the batch size they measure the maximum throughput and latency with a distinct count application. They pick five batch sizes and measure the throughput and latency with different number of computing nodes and compare it with Apache Storm. In a sentiment analysis application they use a dataset of 1.2 billion tweets, feeding the system at a rate of 600 tweets/s in average, with a peak of 2,000 tweets/s. To evaluate the fault tolerance of TimeStream the authors use same two applications. With the distinct count they only inject a failure in one of the computing nodes and observe the recovery time for different window sizes and checkpointing intervals. For the sentiment analysis application they inject failures by selecting operators that form a chain in the DAG and killing one, three or the whole chain of operators and measuring the recovery time for each operator.
 
