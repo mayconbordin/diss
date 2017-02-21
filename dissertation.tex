@@ -607,9 +607,7 @@ In an evaluation of the performance of Apache S4 \cite{chauhan2012performance} a
 
 For MillWheel \cite{akidau2013millwheel}, a distributed and fault tolerant SPS developed at Google, the main metric used to evaluate it is the latency. Regarding its scalability, they look at the median, 95th and 99th percentiles. Results show that while the latency median remains almost unchanged, the tail gets longer.
 
-% REVISION::HERE
-
-Another distributed SPS called TimeStream \cite{qian2013timestream} is evaluated regarding its scalability, fault tolerance, consistency and adaptability to load dynamics. TimeStream packs events into batches for transportation, by varying the batch size they measure the maximum throughput and latency with a distinct count application. They pick five batch sizes and measure the throughput and latency with different number of computing nodes and compare it with Apache Storm. In a sentiment analysis application they use a dataset of 1.2 billion tweets, feeding the system at a rate of 600 tweets/s in average, with a peak of 2,000 tweets/s. To evaluate the fault tolerance of TimeStream the authors use same two applications. With the distinct count they only inject a failure in one of the computing nodes and observe the recovery time for different window sizes and checkpointing intervals. For the sentiment analysis application they inject failures by selecting operators that form a chain in the DAG and killing one, three or the whole chain of operators and measuring the recovery time for each operator.
+Another distributed SPS called TimeStream \cite{qian2013timestream} is evaluated regarding its scalability, fault tolerance, consistency and adaptability to load dynamics. TimeStream packs events into batches for transportation, by varying the batch size they measure the maximum throughput and latency with a distinct count application. They pick five batch sizes and measure the throughput and latency with different number of computing nodes and compare it with Apache Storm. In a sentiment analysis application they use a dataset of 1.2 billion tweets, feeding the system at a rate of 600 tweets/s in average, with a peak of 2,000 tweets/s. To evaluate the fault tolerance of TimeStream the authors use the same two applications. With the distinct count they only inject a failure in one of the computing nodes and observe the recovery time for different window sizes and checkpointing intervals. For the sentiment analysis application they inject failures by selecting operators that form a chain in the DAG and killing one, three or the whole chain of operators and measuring the recovery time for each operator.
 
 Fernandez et al \cite{castro2013integrating} implement a scalable SPS that exposes operator's internal state for checkpointing and backup purposes. For their experiment they use dedicated VM instances (with large RAM memory available) to emit the data streams and receive the results. Their system is able to scale as a result of an increasing input rate. The latencies observed were very skewed for the Linear Road Benchmark, as a result, the authors chose to use the 99th and 95th percentiles, besides the median. The authors also observe the time required for an operator to recover after the willful failure of the VM hosting the operator.
 
@@ -624,7 +622,7 @@ Moreover, their experiments only use a few applications, greatly restricting the
 
 \subsection{Use Cases}
 
-In a trend detection application using Storm \cite{chardonnens2013big}, the experiments were conducted using a cluster of six nodes. One of them was used solely for feeding data into Kafka. Kafka resided in two nodes, while Storm and Cassandra were running in four nodes. The authors analyzed the time required for processing 2TB of data from Twitter and Bitly with one till three Storm supervisors.
+In a trend detection application using Storm \cite{chardonnens2013big}, the experiments were conducted using a cluster of six nodes. One of them was used solely for feeding data into Kafka. Kafka resided in two nodes, while Storm and Cassandra were running in four nodes. The authors analyzed the time required for processing 2TB of data from Twitter and Bitly with one up to three Storm supervisors.
 
 Smit, Simmons and Litoiu \cite{smit2013distributed} propose and implement an architecture for real-time monitoring of cloud resources using Storm for processing streams of metrics, OpenTSDB for storing time-series results and Ganglia for monitoring the performance of the SPS. They compare the average latency of their solution, called MISURE, with Amazon CloudWatch. The average latency is measured over 100 samples, and it shows that MISURE has a latency of less than a second, while CloudWatch ranges between 90 and 300 seconds. The throughput of MISURE is displayed over a 15 minutes window (with 30 samples, 6 experiment runs and 5 samples per time interval) for 4, 8 and 32 computing cores. Over the whole running time (~450 minutes) increasing the number of cores by a factor of 8 incurred an increase in throughput by a factor of 6.85.
 
@@ -653,7 +651,7 @@ More recently, Wahl and Hollunder \cite{wahl2012performance} proposed an environ
 
 %%
 
-The most recent work on CEP benchmarking is CEPBen \cite{li2014cepben}, which is both a benchmark as well as a framework. One key difference of this work is that the smalles unit of data is not an event, but a batch of events. In practice there are three factors that can be changed in the workload: the number of batches, i.e. the size of the dataset; the size of the batch; and the interval between batches, i.e. the input rate. As most benchmarks, the CEPBen also uses as metrics the \emph{throughput}, subdivided into \emph{input} and \emph{output} throughput, and the \emph{response time}, i.e. (end-to-end) latency.
+The most recent work on CEP benchmarking is CEPBen \cite{li2014cepben}, which is both a benchmark as well as a framework. One key difference of this work is that the smallest unit of data is not an event, but a batch of events. In practice there are three factors that can be changed in the workload: the number of batches, i.e. the size of the dataset; the size of the batch; and the interval between batches, i.e. the input rate. As most benchmarks, the CEPBen also uses as metrics the \emph{throughput}, subdivided into \emph{input} and \emph{output} throughput, and the \emph{response time}, i.e. (end-to-end) latency.
 
 The authors of CEPBen define, instead of full-fledged applications, three groups of tests based on functionalities that are the building blocks of event processing: \emph{filtering}, \emph{transformation} and \emph{event pattern detection}. The factors that weigh in the experiments are, besides the workload, the number of query statements, as more statements means more operations that need to be performed for each event; the amount of historical events needed by the query, as it means more memory needs to be used to store these events; and of course, the hardware where the CEP engine is running.
 
@@ -696,6 +694,7 @@ The Table \ref{table:related_work_metrics} summarizes the metrics used by the wo
 \end{center}
 \end{table*}
 
+% REVISION::HERE
 
 \section{Workload Characterization}
 \label{sec:esp:workload_characterization}
