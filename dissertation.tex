@@ -736,12 +736,12 @@ As for the communication patterns, in an SPS an operator can basically send\foot
 
 This is a very high-level characterization of the communication pattern, one that can be realized through source code analysis. But there is a more detailed characterization, obtained by means of instrumentation, that describes the \emph{temporal}, \emph{spatial} and \emph{volume} attributes of the communication \cite{kim1998characterization}, obtained by the observation of the distributions of message generation rates, message destinations, and message sizes and average number of messages, respectively.
 
-% REVISION::HERE
-
 % -----------------------------------------------------------------------------
 \chapter{Model}
 
-This chapter
+This chapter describes the methodology defined for the benchmark, including a set of main metrics to be measured as well as some auxiliar metrics, the set of applications that compose the benchmark suite with an overview of each one of those applications, followed by a workload characterization of them.
+
+In the end we describe the datasets selected for each one of those application as well as a suggestion for the configurations, based on the workload characterization.
 
 \section{Methodology}
 
@@ -766,7 +766,9 @@ This chapter
 
 The main goal of the benchmark suite is to provide a common reference for the evaluation of SPSs. As such, all measurements should be taken independently of the system at evaluation. If possible, metrics collected by the system itself should be disabled to avoid unnecessary overhead.
 
-Measuring the throughput requires one counter per operator instance and another variable to store the current timestamp in the desired resolution, when the next timestamp is reached the counter is reset. The latency on the other hand requires one timestamp at the event arrival or creation and another at the end of the DAG path, in order to calculate the latency and report it together with the arrival timestamp. For the lost tuples there are two counters per operator instance, one for the number of input events and another for the output events, the number of lost tuples is be calculated at the end of the processing.
+Measuring the throughput requires one counter per operator instance and another variable to store the current timestamp in the desired resolution, when the next timestamp is reached the counter is reset. The latency on the other hand requires one timestamp at the event arrival or creation and another at the end of the DAG path, in order to calculate the latency and report it together with the arrival timestamp. For the lost tuples there are two counters per operator instance, one for the number of input events and another for the output events, the number of lost tuples is calculated at the end of the processing.
+
+% REVISION
 
 For each experiment a finite dataset will be defined. The system will be feeded through a message queue system, such as Kafka and RabbitMQ, the same architecture adopted by other works \cite{chardonnens2013big, lim2013execution, wang2013cluster, sawant2013big}. The end of the experiment will be detected by the lack of activity at all operators for a specified period of time after the queue has been emptied.
 
