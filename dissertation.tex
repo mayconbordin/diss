@@ -18,8 +18,11 @@
 \usepackage{multirow}
 \usepackage{longtable}
 \usepackage{array}
+\usepackage{rotating}
 
 \usepackage{subfigure}
+
+\usepackage[alf,abnt-emphasize=bf]{abntex2cite}	% pacote para usar citações abnt
 
 % General Information
 \title{A Benchmark Suite for Distributed Stream Processing Systems}
@@ -82,7 +85,15 @@
 
 % abstract
 \begin{abstract}
-test
+Recently a new application domain characterized by the continuous and low-latency
+  processing of large volumes of data has been gaining attention. The growing number
+  of applications of such genre has led to the creation of \emph{Stream Processing Systems} (SPSs), 
+  systems that abstract details that have no direct relation to the problem at hand.
+  More recently, the ever increasing volumes of data to be processed gave rise to 
+  distributed SPSs. Currently there are in the market several distributed SPSs, however 
+  the existing benchmarks designed for evaluating this kind of system cover only a few applications and workloads, while these systems have a much wider set of applications. 
+  This project proposes a benchmark suite composed of applications from diverse areas 
+  with the purpose of testing SPSs with different workloads and scenarios. This suite was evaluated against Storm and Spark on the Azure Platform and the results have demonstrated the usefulness of the benchmark suite in comparing these systems.
 \end{abstract}
 
 
@@ -107,15 +118,49 @@ In this scenario it would be useful to have a tool for comparing these systems u
 
 \section{Motivation}
 
+Recently a new application domain characterized by the continuous and low-latency processing of large volumes of data has been gaining attention. The growing number of applications of such genre has led to the creation of \emph{Stream Processing Systems} (SPSs), systems that abstract details that have no direct relation to the problem at hand.
+
+More recently, the ever increasing volumes of data to be processed gave rise to distributed SPSs. Currently there are in the market several distributed SPSs, however the few benchmarks that currently exist for these systems use only synthetic or very simple applications
+
 \section{Goals}
+
+The main goal of this work is the creation of a benchmark suite for SPSs composed of applications from different areas, workloads and dataloads, defining metrics for the measurement of the performance, scalability and reliability, and scenarios with the occurrence of failures and bursts in the volume of data. With this benchmark suite we expect to provide a reference point so that people interested in using an SPS can choose the one that better fits its needs.
+
+The second goal is to apply the benchmark suite in a comparison between the main distributed SPSs in the market. Through this comparison we expect to demonstrate the usefullness of this benchmark suite, as well as provide a reference implementation of the benchmark so that it can be applied in other SPSs.
 
 \section{Contributions}
 
+This research work expects to contribute with:
+
+\begin{itemize}
+\item \textbf{Define a solid set of metrics for stream processing}.\\
+	  This work aims to research all previous works, gather information on all metrics used and then define the ones that are better suited for evaluating SPSs.
+
+\item \textbf{Become a standard on SPS benchmarking}.\\
+      Or at least improve the way these systems are evaluated, with higher quality benchmarks that can better show how they perform in different scenarios.
+      
+\item \textbf{Provide a defined set of applications for benchmarking}.\\
+      As well as a reference implementation for those aplications, so that they can be reproduced in other SPSs.
+      
+
+\end{itemize}
+
+
 \section{Document Organization}
 
+After this first Chapter, which contains a brief introduction of this research, the rest of this document is organized as follows:
+
+Chapter \ref{chapter:event-stream-processing} introduces the basic concepts of Stream Processing on Sections \ref{sec:esp:requirements} and \ref{sec:esp:concepts}. On Section \ref{sec:esp:history} the history of Stream Processing and what came before it is described. Then it moves to more specific areas of Stream Processing, such as operator placement on Section \ref{sec:esp:scheduling_load_balancing}, fault tolerance on Section\ref{sec:esp:fault_tolerance} and message systems on Section \ref{sec:esp:data_transport}. We introduce the main platforms of stream processing on Section \ref{sec:esp:platforms} and then the main work done in performance evaluation of these platforms on Section \ref{sec:esp:performance_evaluation}.
+
+On Chapter \ref{chapter:model} the model of this research is described, detailing the methodology for benchmarking SPSs on Section \ref{sec:methodology}, including the metrics that are going to be used for evaluation of these systems. On Section \ref{sec:application-selection} we describe how the selection of applications took place and then on Section \ref{sec:applications} we describe these applications in detail. In the end, at Section \ref{sec:workload-characterization}, a workload characterization of these applications is described and finally the configurations and datasets that can be used to execute these applications, on Section \ref{sec:configuration_datasets}.
+
+The results of the performance evaluation of Storm and Spark using a subset of the applications of the benchmark are on Chapter \ref{chapter:results}. In Section \ref{sec:set-up} the set-up of the environment is described, and in the subsequent sections the results in each application evaluated are shown.
+
+At last, in Chapter \ref{chapter:conclusion}, are the conclusions of this research as well as the final considerations and future work.
 
 % -----------------------------------------------------------------------------
 \chapter{Event-Stream Processing}
+\label{chapter:event-stream-processing}
 
 %This chapter introduces the concepts that govern Stream Processing Systems (SPSs), also known as Event-Stream Processing (ESP) or Stream Processing Engines (SPEs), in Section \ref{sec:esp:concepts}. Section \ref{sec:esp:history} traces the history of SPSs back to the first Data Stream Management Systems (DSMSs), Complex Event Processing systems (CEPs), Continuous Queries and Active Databases.
 %
@@ -133,7 +178,7 @@ In this scenario it would be useful to have a tool for comparing these systems u
 %
 
 
-This chapter introduces the concepts that govern Stream Processing Systems (SPSs), also known as Event-Stream Processing (ESP) or Stream Processing Engines (SPEs), in Section \ref{sec:esp:concepts}. Section \ref{sec:esp:history} traces the history of SPSs back to the first Data Stream Management Systems (DSMSs), Complex Event Processing systems (CEPs), Continuous Queries and Active Databases.
+This chapter introduces the requirements and concepts that govern Stream Processing Systems (SPSs), also known as Event-Stream Processing (ESP) or Stream Processing Engines (SPEs), in Sections \ref{sec:esp:requirements} and \ref{sec:esp:concepts}, respectively. Section \ref{sec:esp:history} traces the history of SPSs back to the first Data Stream Management Systems (DSMSs), Complex Event Processing systems (CEPs), Continuous Queries and Active Databases.
 
 In sequence, the architectural aspects of SPSs are explored, including tecniques for scheduling and load balancing jobs and tasks within jobs to Processing Elements (PEs) (Section \ref{sec:esp:scheduling_load_balancing}), the methods employed for guaranteeing that messages are processed and the operator's state is not lost in a failure (Section \ref{sec:esp:fault_tolerance}), as well as the different data transportation middlewares and communication patterns used (Section \ref{sec:esp:data_transport}).
 
@@ -664,7 +709,8 @@ The Table \ref{table:related_work_metrics} summarizes the metrics used by the wo
 
 \begin{table*}[t]
 \begin{center}
-	\footnotesize
+	\tiny
+	\centering
 	\begin{tabular}{ | l | >{\centering\arraybackslash}p{1.5cm} | c | c | >{\centering\arraybackslash}p{1cm} | c | >{\centering\arraybackslash}p{1.5cm} | >{\centering\arraybackslash}p{1.5cm} | >{\centering\arraybackslash}p{1.5cm} |}
    		\hline
         \textbf{Work} & \textbf{Scalability} & \textbf{Latency} & \textbf{Throughput} & \textbf{Tuple Loss} & \textbf{Runtime} & \textbf{Resource Usage} & \textbf{Recovery Time} & \textbf{Other} \\\hline
@@ -738,12 +784,14 @@ This is a very high-level characterization of the communication pattern, one tha
 
 % -----------------------------------------------------------------------------
 \chapter{Model}
+\label{chapter:model}
 
 This chapter describes the methodology defined for the benchmark, including a set of main metrics to be measured as well as some auxiliar metrics, the set of applications that compose the benchmark suite with an overview of each one of those applications, followed by a workload characterization of them.
 
 In the end we describe the datasets selected for each one of those application as well as a suggestion for the configurations, based on the workload characterization.
 
 \section{Methodology}
+\label{sec:methodology}
 
 % Input:
 %   - rate (speed)
@@ -814,6 +862,7 @@ Ultimately, we have decided to trade strict message delivery guarantees for more
 
 
 \section{Application Selection}
+\label{sec:application-selection}
 
 As stated in Section \ref{sec:esp:workload_characterization}, the relevance of a benchmark suite lies in the applications that compose it. In order to select a set of applications that cover a wide and relevant range of use cases, we first needed to determine the main areas where SPSs are employed.
 
@@ -1115,6 +1164,7 @@ The application (called VoIPSTREAM) detects telemarketing users by analysing cal
 
 
 \section{Workload Characterization}
+\label{sec:workload-characterization}
 
 To characterize the selected applications, experiments were conducted in a single machine in order to measure the selectivity of operators, the size of the tuples at each operator (using the datasets listed at Section \ref{sec:configuration_datasets}), the memory usage of the applications and the time required to process one tuple per operator.
 
@@ -1140,7 +1190,7 @@ The usual behavior for the tuple size is for it to decrease along the DAG path, 
 \begin{figure}[ht!]
     \centering
 	\includegraphics[width=.8\textwidth]{images/memory_usage.pdf}
-	\caption{Memory usage per application}
+	\caption{Memory usage per application (in MBytes)}
 	\label{fig:memory_usage}
 \end{figure}
 
@@ -1163,43 +1213,43 @@ The last characteristic observed was the time for an operator to process one tup
 	\begin{tabular}{ | l | p{2.5cm} | p{2.5cm} | p{2cm} | l | l | l | p{1.5cm} | }
     		\hline
     		\textbf{App} & \textbf{Area} & \textbf{Operator} & \textbf{Type} & \textbf{Mem.} & \textbf{Sel.} & \textbf{Time} & \textbf{Comm.} \\ \hline
-    		\multirow{2}{*}{WC} & \multirow{2}{*}{Text Processing} & SplitSentence & Projector? & 1   & ? & $N$ & Group By \\\cline{3-8}
-    					        &                                  & WordCount     & Aggregator & $W$ & ? & $N$ & Group By \\\hline
+    		\multirow{2}{*}{WC} & \multirow{2}{*}{Text Processing} & SplitSentence & Projector & 1   & - & $N$ & Group By \\\cline{3-8}
+    					        &                                  & WordCount     & Aggregator & $W$ & - & $N$ & Group By \\\hline
     					                
 %    		\multirow{2}{*}{TT} & \multirow{2}{*}{Social Network} & SplitSentence & Projector? & 1   & ? & ? & Group By \\\cline{3-8}
 %    					        &                                 & WordCount     & Aggregator & $W$ & ? & ? & Group By \\\hline
     					                  
-    		\multirow{2}{*}{BI} & \multirow{2}{*}{Finance} & VWAP         & Group By Aggregator & $S$ & ? & $N$ & Group By \\\cline{3-8}
-    					        &                          & BargainIndex & Stream Join         & $S$ & ? & $N$ & Shuffle \\\hline
+    		\multirow{2}{*}{BI} & \multirow{2}{*}{Finance} & VWAP         & Group By Aggregator & $S$ & - & $N$ & Group By \\\cline{3-8}
+    					        &                          & BargainIndex & Stream Join         & $S$ & - & $N$ & Shuffle \\\hline
     					                   
-    		\multirow{2}{*}{SD} & \multirow{2}{*}{Sensor Network} & MovingAverage  & Group By Aggregator & $D$ & ? & $N$ & Group By \\\cline{3-8}
-    					        &                                 & SpikeDetector  & Select              & $1$ & ? & $N$ & Shuffle \\\hline
+    		\multirow{2}{*}{SD} & \multirow{2}{*}{Sensor Network} & MovingAverage  & Group By Aggregator & $D$ & - & $N$ & Group By \\\cline{3-8}
+    					        &                                 & SpikeDetector  & Select              & $1$ & - & $N$ & Shuffle \\\hline
     					                   
 %    		\multirow{2}{*}{SA} & \multirow{2}{*}{\parbox[t]{2.5cm}{Natural Language Processing}} & StateLocator         & Projector & $1$ & ? & ? & Group By \\\cline{3-8}
 %    					        &                                                                 & Sentiment Calculator  & Join      & $1$ & ? & ? & Shuffle \\\hline
     					                   
-    		\multirow{1}{*}{FD} & \multirow{1}{*}{Finance} & Predictor & Select & $Uw$ & ? & $N$ & Shuffle \\\hline
+    		\multirow{1}{*}{FD} & \multirow{1}{*}{Finance} & Predictor & Select & $Uw$ & - & $N$ & Shuffle \\\hline
     		
-    		\multirow{2}{*}{MO} & \multirow{2}{*}{\parbox[t]{2.5cm}{Network\\Monitoring}} & ObservationScore & Group By Aggregator & $r$  & ? & $Nr$ & Group By \\\cline{3-8}
-    					        &                                                         & AnomalyScore     & Group By Aggregator & $Mw$ & ? & $N$ & Shuffle \\\cline{3-8}
-    					        &                                                         & AlertTrigger     & Select              & $r$  & ? & $Nr$ & Shuffle \\\hline
+    		\multirow{2}{*}{MO} & \multirow{2}{*}{\parbox[t]{2.5cm}{Network\\Monitoring}} & ObservationScore & Group By Aggregator & $r$  & - & $Nr$ & Group By \\\cline{3-8}
+    					        &                                                         & AnomalyScore     & Group By Aggregator & $Mw$ & - & $N$ & Shuffle \\\cline{3-8}
+    					        &                                                         & AlertTrigger     & Select              & $r$  & - & $Nr$ & Shuffle \\\hline
     					        
-    		\multirow{1}{*}{RL} & \multirow{1}{*}{Advertising} & Reinforcement Learner & Stream Join & $m|S||A|$ & ? & $N$ & Shuffle \\\hline
+    		\multirow{1}{*}{RL} & \multirow{1}{*}{Advertising} & Reinforcement Learner & Stream Join & $m|S||A|$ & - & $N$ & Shuffle \\\hline
     		
-    		\multirow{2}{*}{CA} & \multirow{2}{*}{\parbox[t]{2.5cm}{Web Analytics}} & RepeatVisit    & Group By Aggregator & $\sum_{i=0}^{U}v_{i}$  & ? & $N$ & Shuffle \\\cline{3-8}
-    					        &                                                   & VisitStats     & Aggregator          & $1$                    & ? & $N$ & Shuffle \\\cline{3-8}
-    					        &                                                   & LocationFinder & Join                & $1$                    & ? & $N$ & Group By \\\cline{3-8}
-    					        &                                                   & GeoStats       & Group By Aggregator & $C + T$                & ? & $N$ & Shuffle \\\hline
+    		\multirow{2}{*}{CA} & \multirow{2}{*}{\parbox[t]{2.5cm}{Web Analytics}} & RepeatVisit    & Group By Aggregator & $\sum_{i=0}^{U}v_{i}$  & - & $N$ & Shuffle \\\cline{3-8}
+    					        &                                                   & VisitStats     & Aggregator          & $1$                    & - & $N$ & Shuffle \\\cline{3-8}
+    					        &                                                   & LocationFinder & Join                & $1$                    & - & $N$ & Group By \\\cline{3-8}
+    					        &                                                   & GeoStats       & Group By Aggregator & $C + T$                & - & $N$ & Shuffle \\\hline
     					        
-    		\multirow{2}{*}{LP} & \multirow{2}{*}{\parbox[t]{2.5cm}{Web Analytics}} & VolumeCount    & Projector 	       & $1$  & ? & $N$ & Shuffle \\\cline{3-8}
-    					        &                                                   & IPStatusParser & Projector           & $1$  & ? & $N$ & Shuffle, Group By \\\cline{3-8}
-    					        &                                                   & Status Counter & Group By Aggregator & $S$  & ? & $N$ & Shuffle \\\cline{3-8}
-    					        &                                                   & IPLocation     & Join                & $1$  & ? & $N$ & Group By \\\cline{3-8}
-    					        &                                                   & CountryStatus  & Join                & $C + T$  & $N$ & ? & Group By \\\hline
+    		\multirow{2}{*}{LP} & \multirow{2}{*}{\parbox[t]{2.5cm}{Web Analytics}} & VolumeCount    & Projector 	       & $1$  & - & $N$ & Shuffle \\\cline{3-8}
+    					        &                                                   & IPStatusParser & Projector           & $1$  & - & $N$ & Shuffle, Group By \\\cline{3-8}
+    					        &                                                   & Status Counter & Group By Aggregator & $S$  & - & $N$ & Shuffle \\\cline{3-8}
+    					        &                                                   & IPLocation     & Join                & $1$  & - & $N$ & Group By \\\cline{3-8}
+    					        &                                                   & CountryStatus  & Join                & $C + T$  & $N$ & - & Group By \\\hline
     					        
-    		\multirow{2}{*}{SF} & \multirow{2}{*}{\parbox[t]{2.5cm}{--}} & Tokenizer       & Projector       & $1$             & ? & $N$ & Group By \\\cline{3-8}
-    					        &                                        & WordProbability & Join            & $W$             & ? & $N$ and $NW$ & Group By \\\cline{3-8}
-    					        &                                        & BayesRule       & Join Aggregator & $\overline{M}$  & ? & $N$ & Shuffle \\\hline
+    		\multirow{2}{*}{SF} & \multirow{2}{*}{\parbox[t]{2.5cm}{--}} & Tokenizer       & Projector       & $1$             & - & $N$ & Group By \\\cline{3-8}
+    					        &                                        & WordProbability & Join            & $W$             & - & $N$ and $NW$ & Group By \\\cline{3-8}
+    					        &                                        & BayesRule       & Join Aggregator & $\overline{M}$  & - & $N$ & Shuffle \\\hline
     		
 	\end{tabular}
 	\caption{Applications characterization}
@@ -1349,31 +1399,492 @@ There is another approach that has not been used in this work, which is simulati
 
 % -----------------------------------------------------------------------------
 \chapter{Results}
+\label{chapter:results}
+
+This chapter presents the results obtained by applying the benchmark model defined on Chapter \ref{chapter:model} in the comparison of two of main stream processing systems in the market against a subset of the applications defined.
+
+The SPSs chosen were Spark and Storm as they are the most proeminent on their category and also because they have different approaches on how to handle stream data processing.
+
+Out of the 14 applications defined, due to time restrictions to the cluster for running the experiments, 3 were chosen: word count, log processing and traffic monitoring. The first one has become a standard in Big Data bechmarks, while the second has a good set of operations applied to logs as well as having the biggest dataset available at the time. And the third application is a convergence of IoT and Big Data applied to what is know as \textit{Smart Cities}.
 
 \section{Set-Up}
+\label{sec:set-up}
+
+The experiments were executed in the Azure cloud computing service with a cluster of 8 computing instances, one master instance and 3 data instances, all of type \textit{Medium} (Standard\_A2) running Ubuntu Server 12.04. The configuration of those instances is described on Table \ref{table:azure_medium_config}.
+
+\begin{table*}[h]
+\centering
+\caption{My caption}
+\label{my-label}
+\begin{tabular}{lllll}
+\hline
+\textbf{CPU Cores}                & 2        &  &  &  \\ \hline
+\textbf{Memory}                   & 3.5 GB   &  &  &  \\ \hline
+\textbf{Local HDD}                & 135 GB   &  &  &  \\ \hline
+\textbf{Max data disk throughput} & 500 IOPS &  &  &  \\ \hline
+\end{tabular}
+\caption{Azure Medium instance configuration.}
+	\label{table:azure_medium_config}
+\end{table*}
+
+The message system employed for the experiments was Apache Kafka 0.8.1.1 (Scala 2.9.2) installed on the 3 data instances of the cluster. The data producers that fed Kafka were also installed on the data instances, thus avoiding network traffic.
+
+Each data instance had one data producer reading data from a separate hard disk and forwarding it to Kafka. On the application side, the number of Kafka partitions always matched the number of instances of the source operator.
+
+The Spark version used on the experiments was 1.3.1 on top of Hadoop YARN 2.6. And for Storm it was version 0.9.2 running on top of Supervisord. Storm also depends on Zookeeper for coordination, in the cluster version 3.4.6 was installed on the master instance, plus two of the three data instances.
+
+\begin{figure}[h]
+    \centering
+	\includegraphics[width=.8\textwidth]{images/cluster_azure.pdf}
+	\caption{Cluster Azure}
+	\label{fig:cluster_azure}
+\end{figure}
+
+
 
 % Environment, message system, configurations, etc, etc...
 
 \section{Word Count}
+
+For the \textit{word count} on Storm, 52 different configurations of number of instances of operators were tried. While on Spark only 12 of those 52 configurations were able to run effectively.
+
+Each configuration is identified by \textbf{n\textit{N}}\_\textbf{x\textit{Source}}\_\textbf{x\textit{Splitter}}\_\textbf{x\textit{Counter}}\_\textbf{x\textit{Sink}} which is the number of nodes and the number of instances of each operator. If only one \textbf{x\textit{X}} is defined, it means all operators have the same number of instances.
+
+When analysing the 95th percentile of latency results on Storm some experiments showed extremely high latencies asn shown on Figure \ref{fig:storm_wordcount_latency}.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_wordcount/full_latency.pdf}
+	\caption{Storm Word Count Latencies}
+	\label{fig:storm_wordcount_latency}
+\end{figure}
+
+Looking more closely, the best experiments managed to perform latencies under 15 seconds as the Figure \ref{fig:storm_wordcount_latency_best} shows. The best one was \textbf{n2\_x1} with a latency of 7.2 seconds, followed by \textbf{n2\_x1\_x5\_x6\_x3} with 9.9 seconds.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_wordcount/full_best_latency.pdf}
+	\caption{Storm Word Count Best Latencies}
+	\label{fig:storm_wordcount_latency_best}
+\end{figure}
+
+When looking at the throughput average on Figure \ref{fig:storm_wordcount_throughput}, the best results occur on the experiments with 8 nodes. The best one (\textbf{n8\_x4}) was able to deliver an average of 95k tuples per second on the splitter and counter, and 94k on the sink, which is the throughput of results.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_wordcount/full_throughput.pdf}
+	\caption{Storm Word Count Throughput}
+	\label{fig:storm_wordcount_throughput}
+\end{figure}
+
+The network usage average on Figure \ref{fig:storm_wordcount_network} shows that as the number of nodes increases the network activity also increases. Experiments with one and two nodes show very minimal network usage.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_wordcount/full_network.pdf}
+	\caption{Storm Word Count Network Usage}
+	\label{fig:storm_wordcount_network}
+\end{figure}
+
+The CPU and memory usage are displayed on Figure \ref{fig:storm_wordcount_cpu_mem}. Some of the experiments failed to correctly measure the CPU usage.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_wordcount/full_cpu_mem.pdf}
+	\caption{Storm Word Count CPU and Memory Usage}
+	\label{fig:storm_wordcount_cpu_mem}
+\end{figure}
+
+On Spark the 95th percentile of latencies (Figure \ref{fig:spark_wordcount_latency}) were more stable, with results ranging from 20 to 40 seconds. The batch size of the applications was configured to 1 second.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/spark_wordcount/latency.pdf}
+	\caption{Spark Word Count Latencies}
+	\label{fig:spark_wordcount_latency}
+\end{figure}
+
+The average throughput of the applications (Figure \ref{fig:spark_wordcount_throughput}) were inferior to Storm, but they were more stable. On the sink, however, the throughput was much lower, with results ranging from 2897 tuples per second on experiment \textbf{n1\_x1\_x5\_x6\_x3} and 3933 tuples per second on experiment \textbf{n4\_x3\_x5\_x6\_x3}.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/spark_wordcount/throughput.pdf}
+	\caption{Spark Word Count Throughput}
+	\label{fig:spark_wordcount_throughput}
+\end{figure}
+
+The network usage, on Figure \ref{fig:spark_wordcount_network}, also showed a more stable increase as the number of nodes were increased.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/spark_wordcount/network.pdf}
+	\caption{Spark Word Count Network Usage}
+	\label{fig:spark_wordcount_network}
+\end{figure}
+
+The CPU usage on the Spark applications shown on Figure \ref{fig:spark_wordcount_cpu_mem} decreased as the number of nodes increased, while the memory reached its peak at 90\% on experiment \textbf{n4\_x1\_x5\_x6\_x3} and then decreased slightly.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/spark_wordcount/cpu_mem.pdf}
+	\caption{Spark Word Count CPU and Memory Usage}
+	\label{fig:spark_wordcount_cpu_mem}
+\end{figure}
+
+In general, Storm had a better performance than Spark, with better results for throughput and latency, the latter was expected because of the batching of tuples that happens on Spark. On the other hand, Spark seemed more stable regarding the usage of resources.
+
+\begin{table}[H]
+\tiny
+\centering
+\caption{Comparison of Word Count results}
+\label{table:comparison_wordcount}
+\begin{tabular}{|l|l|l|l|}
+\hline
+Platform & Experiment & Latency (ms) & Throughput (tps)\\ \hline
+Spark    &                                      & 23625.82965848                           & 2897.58773878276                         \\ \cline{1-1} \cline{3-4} 
+Storm    & \multirow{-2}{*}{n1\_x1\_x5\_x6\_x3} & \cellcolor[HTML]{34E570}13273.488994646  & \cellcolor[HTML]{34E570}40859.5828991725 \\ \hline
+Spark    &                                      & \cellcolor[HTML]{34E570}33603.3111416812 & 2999.1589673913 \\ \cline{1-1} \cline{3-4} 
+Storm    & \multirow{-2}{*}{n1\_x2\_x5\_x6\_x3} & 114488877.09637                          & \cellcolor[HTML]{34E570}44232.99535501 \\ \hline
+Spark    &                                      & 31052.7268609758                         & 3081.00826446281 \\ \cline{1-1} \cline{3-4} 
+Storm    & \multirow{-2}{*}{n1\_x3\_x5\_x6\_x3} & \cellcolor[HTML]{34E570}16825.2406841784 & \cellcolor[HTML]{34E570}42383.2321259843 \\ \hline
+Spark    &                                      & 30100.0515049                            & 3283.37426356589 \\ \cline{1-1} \cline{3-4} 
+Storm    & \multirow{-2}{*}{n2\_x1\_x5\_x6\_x3} & \cellcolor[HTML]{34E570}9926.04326233308 & \cellcolor[HTML]{34E570}30046.043963401 \\ \hline
+Spark    &                                      & \cellcolor[HTML]{34E570}30220.6235703883 & 3493.33747547417 \\ \cline{1-1} \cline{3-4} 
+Storm    & \multirow{-2}{*}{n2\_x2\_x5\_x6\_x3} & 124921.308943089                         & \cellcolor[HTML]{34E570}14865.7479338843 \\ \hline
+Spark    &                                      & \cellcolor[HTML]{34E570}24463.1167392591 & 3849.35728542914 \\ \cline{1-1} \cline{3-4} 
+Storm    & \multirow{-2}{*}{n2\_x3\_x5\_x6\_x3} & 1521321.05084746                         & \cellcolor[HTML]{34E570}15664.8291666667 \\ \hline
+Spark    &                                      & \cellcolor[HTML]{34E570}22485.5769731385 & 3828.1811422778 \\ \cline{1-1} \cline{3-4} 
+Storm    & \multirow{-2}{*}{n4\_x1\_x5\_x6\_x3} & 197766604.967704                         & \cellcolor[HTML]{34E570}29408.880794018 \\ \hline
+Spark    &                                      & \cellcolor[HTML]{34E570}25924.7815501678 & 3689.2752534079 \\ \cline{1-1} \cline{3-4} 
+Storm    & \multirow{-2}{*}{n4\_x2\_x5\_x6\_x3} & 36072.407363065                          & \cellcolor[HTML]{34E570}23171.9327135203 \\ \hline
+Spark    &                                      & \cellcolor[HTML]{34E570}23613.5836153283 & 3933.79567956796 \\ \cline{1-1} \cline{3-4} 
+Storm    & \multirow{-2}{*}{n4\_x3\_x5\_x6\_x3} & 742380.394572025                         & \cellcolor[HTML]{34E570}27387.705370844 \\ \hline
+Spark    &                                      & \cellcolor[HTML]{34E570}26752.1967323336 & 3681.78756420063 \\ \cline{1-1} \cline{3-4} 
+Storm    & \multirow{-2}{*}{n8\_x1\_x5\_x6\_x3} & 308494259.645302                         & \cellcolor[HTML]{34E570}33996.4117473039 \\ \hline
+Spark    &                                      & 23625.82965848                           & 3879.84336645237 \\ \cline{1-1} \cline{3-4} 
+Storm    & \multirow{-2}{*}{n8\_x2\_x5\_x6\_x3} & \cellcolor[HTML]{34E570}14764.3578708167 & \cellcolor[HTML]{34E570}65082.6187793427 \\ \hline
+Spark    &                                      & \cellcolor[HTML]{34E570}23647.8457369693 & 3858.31215970962 \\ \cline{1-1} \cline{3-4} 
+Storm    & \multirow{-2}{*}{n8\_x3\_x5\_x6\_x3} & 15670409.7215233                         & \cellcolor[HTML]{34E570}60261.0911764706 \\ \hline
+\end{tabular}
+\end{table}
+
+Latency = 95th percentile, Throughput = average, CPU and Memory Usage = average \%, Network Usage = average MBytes
+
+Analysing Table \ref{table:comparison_wordcount}, Storm did better on throughtput (won 12 out of 12 experiments), while Spark did better on latency (won 8 out of 12 experiments).
+
+
+
+
 \section{Log Processing}
+
+For the \textit{log processing} application, 44 different configurations were executed on Storm, and a subset of 16 on Spark.
+
+Each configuration is identified by \textbf{n\textit{N}}\_\textbf{x\textit{Source}}\_\textbf{x\textit{VolumeCounter}}\_\textbf{x\textit{StatusCounter}}\\\_\textbf{x\textit{GeoFinder}}\_\textbf{x\textit{GeoStats}}\_\textbf{x\textit{VolumeSink}}\_\textbf{x\textit{StatusSink}}\_\textbf{x\textit{CountrySink}} which is the number of nodes and the number of instances of each operator. If only one \textbf{x\textit{X}} is defined, it means all operators have the same number of instances.
+
+On Spark, due to its functional programming nature, some operators required actually two operators in order to first partitionate the tuples and then do the actual counting. Those were the \textit{volume counter}, \textbf{status counter}, and the \textbf{geofinder} and \textbf{geostats} were splitted into four operators: two for partitioning and counting cities, and two for partitioning and counting countries.
+
+Looking at the 95th percentile of latencies for Storm on Figure \ref{fig:storm_logprocessing_latency}, there were some experiments with latencies beyond the acceptable.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_logprocessing/full_latency.pdf}
+	\caption{Storm Log Processing Latencies}
+	\label{fig:storm_logprocessing_latency}
+\end{figure}
+
+Looking more closely at the best latencies (Figure \ref{fig:storm_logprocessing_latency_best}), some experiments like \textbf{n2\_x1\_x2\_x1\_x4\_x2} had latencies of 236 ms for the \textit{count sink} and 192 ms for the \textit{geo sink}.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_logprocessing/best_latency.pdf}
+	\caption{Storm Log Processing Best Latencies}
+	\label{fig:storm_logprocessing_latency_best}
+\end{figure}
+
+The throughput average on Figure \ref{fig:storm_logprocessing_throughput} shows that a good configuration sometimes is better than adding more nodes to the application. At least 5 experiments with 4 nodes performed better than all but one experiment with 8 nodes, which is \textbf{n8\_x3}, with an average throughput of 8.6k tuples per second for \textit{geofinder}, \textit{geostats} and \textit{geo sink}, and around 10.4k tuples per second for the remaining operators.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_logprocessing/full_throughput.pdf}
+	\caption{Storm Log Processing Throughput}
+	\label{fig:storm_logprocessing_throughput}
+\end{figure}
+
+Figure \ref{fig:storm_logprocessing_sink_throughput} shows only the throughput of the sink operators, i.e. the throughput of results.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_logprocessing/sink_throughput.pdf}
+	\caption{Storm Log Processing Sink Throughput}
+	\label{fig:storm_logprocessing_sink_throughput}
+\end{figure}
+
+When looking at the network usage on Figure \ref{fig:storm_logprocessing_network} there is undoubtedly a resemblance with the throughput chart, with the most performant experiments were the ones that used more network, as they pushed more tuples downstream.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_logprocessing/full_network.pdf}
+	\caption{Storm Log Processing Network Usage}
+	\label{fig:storm_logprocessing_network}
+\end{figure}
+
+The memory usage (Figure \ref{fig:storm_logprocessing_cpu_mem}) on the other hand decreased as more nodes were added. The CPU also had a similar trend, but looking more closely it is possible to notice that the highest CPU usages (above 50\%) are the ones that performed better on throughput.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_logprocessing/full_cpu_mem.pdf}
+	\caption{Storm Log Processing CPU and Memory Usage}
+	\label{fig:storm_logprocessing_cpu_mem}
+\end{figure}
+
+Latencies on Spark, as seen on Figure \ref{fig:spark_logprocessing_latency}, ranged from 2.5 seconds to a little below 40 seconds. The best latencies occurred at experiment \textbf{n1\_x8\_x2\_x1\_x4\_x2} with 2.5 seconds for the \textit{volume counts sink}, 6.8 seconds for the \textit{country counts sink} and 9.3 seconds for the \textit{city counts sink}.
+
+The chart suggests that for experiments within a number of nodes, increasing the number of source operators did improved the overall latency.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/spark_logprocessing/latency.pdf}
+	\caption{Spark Log Processing Latencies}
+	\label{fig:spark_logprocessing_latency}
+\end{figure}
+
+On the throughput for Spark (Figure \ref{fig:spark_logprocessing_throughput}) the best performant operator was the \textit{common log parser} (which is part of the \textit{source}), but in general thr throughput was worse than on Storm.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/spark_logprocessing/throughput.pdf}
+	\caption{Spark Log Processing Throughput}
+	\label{fig:spark_logprocessing_throughput}
+\end{figure}
+
+And if we look only at the throughput of the sinks results were much morse, with the \textit{city counts sink} operator showing the best results of those, but still very far from the numbers that Storm was able to deliver.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/spark_logprocessing/sink_throughput.pdf}
+	\caption{Spark Log Processing Sink Throughput}
+	\label{fig:spark_logprocessing_sink_throughput}
+\end{figure}
+
+The network usage on Figure \ref{fig:spark_logprocessing_network} shows a much lower traffic than the one of Storm experiments.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/spark_logprocessing/network.pdf}
+	\caption{Spark Log Processing Network Usage}
+	\label{fig:spark_logprocessing_network}
+\end{figure}
+
+And the CPU usage (Figure \ref{fig:spark_logprocessing_cpu_mem}) of the experiments show that it was being under used. Some of the experiments had a failure on the component that collected resource usage metrics.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/spark_logprocessing/cpu_mem.pdf}
+	\caption{Spark Log Processing CPU and Memory Usage}
+	\label{fig:spark_logprocessing_cpu_mem}
+\end{figure}
+
+The low resource usage by itself is not a bad sign, but together with the poor performance of the application, it shows that this application has a pattern of communication that is better suited for Storm, and it would have to be completely rethought for Spark architecture.
+
+It is clear that for this application Storm did better in all aspects, and some experiments were able to deliver both high throughput as well as low latencies. It also evidenced that fine tuning the configurations of the experiment can achieve better results than simply increasing the number of nodes.
+
+\begin{table}[H]
+\tiny
+\centering
+\caption{Comparison of Log Processing results}
+\label{table:log-processing-results}
+\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\hline
+Platform & Experiment                               & Throughput (volume)                      & Throughput (geo)                         & Throughput (status)                      & Latency (status)                         & Latency (geo)                            & Latency (volume)                         \\ \hline
+Spark    &                                          & 1.93074324324324                         & 1.45959595959596                         & 9.58974358974359                         & 39320.4078552146                         & 32763.0934065934                         & 10448.3701592624                         \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n1\_x1\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}1999.49816079874 & \cellcolor[HTML]{67FD9A}1665.76307531381 & \cellcolor[HTML]{67FD9A}1999.38707983193 & \cellcolor[HTML]{67FD9A}25.4692708333333 & \cellcolor[HTML]{67FD9A}210.478581979321 & \cellcolor[HTML]{67FD9A}3.29776158250911 \\ \hline
+Spark    &                                          & 3.60240963855422                         & 3.80722891566265                         & 21.6270491803279                         & 18844.2364011935                         & 13988.976068038                          & 4872.89626207476                         \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n1\_x2\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}2044.38279301746 & \cellcolor[HTML]{67FD9A}1700.90633437175 & \cellcolor[HTML]{67FD9A}2043.32107995846 & \cellcolor[HTML]{67FD9A}1118.59902597403 & \cellcolor[HTML]{67FD9A}726.931209415584 & \cellcolor[HTML]{67FD9A}307.97442662878  \\ \hline
+Spark    &                                          & 4.04347826086957                         & 5.6231884057971                          & 27.0359712230216                         & \cellcolor[HTML]{67FD9A}11957.5660586572 & \cellcolor[HTML]{67FD9A}9016.64420289855 & \cellcolor[HTML]{67FD9A}3582.41756393001 \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n1\_x4\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}1792.96754250386 & \cellcolor[HTML]{67FD9A}1484.9984399376  & \cellcolor[HTML]{67FD9A}1767.88682170543 & 111913.900306748                         & 183408.307573416                         & 102437.234662577                         \\ \hline
+Spark    &                                          & 5.07407407407407                         & 7.5875                                   & 31.8780487804878                         & \cellcolor[HTML]{67FD9A}9396.85105597401 & \cellcolor[HTML]{67FD9A}6860.51700888753 & \cellcolor[HTML]{67FD9A}2569.37347215935 \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n1\_x8\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}1023.67365269461 & \cellcolor[HTML]{67FD9A}808.489795918367 & \cellcolor[HTML]{67FD9A}1020.39150943396 & 37971.9610849057                         & 116636.56462585                          & 59924.9356643357                         \\ \hline
+Spark    &                                          & 1.80769230769231                         & 2.08395061728395                         & 12.1571072319202                         & 25914.887547413                          & 23388.7110609481                         & \cellcolor[HTML]{67FD9A}8541.72202998847 \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n2\_x1\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}4942.92461252325 & \cellcolor[HTML]{67FD9A}4115.75576493925 & \cellcolor[HTML]{67FD9A}4942.86265030371 & \cellcolor[HTML]{67FD9A}236.293664383562 & \cellcolor[HTML]{67FD9A}192.08291549468  & 20281.1640988017                         \\ \hline
+Spark    &                                          & 3.10795454545455                         & 4.75852272727273                         & 25.5498575498575                         & \cellcolor[HTML]{67FD9A}12859.9195729352 & 10726.1025669768                         & 4156.42327150084                         \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n2\_x2\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}5381.4324017821  & \cellcolor[HTML]{67FD9A}4479.3023331173  & \cellcolor[HTML]{67FD9A}5381.44475048607 & 24743.644184007                          & \cellcolor[HTML]{67FD9A}362.858555254345 & \cellcolor[HTML]{67FD9A}77.1451008530655 \\ \hline
+Spark    &                                          & 4.09375                                  & 7.04484304932735                         & 35.6547085201794                         & \cellcolor[HTML]{67FD9A}10878.4345621221 & 7308.70540796964                         & \cellcolor[HTML]{67FD9A}2965.66518757564 \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n2\_x4\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}5989.15232249965 & \cellcolor[HTML]{67FD9A}4983.80786391523 & \cellcolor[HTML]{67FD9A}5988.9188397713  & 3802019.8191937                          & \cellcolor[HTML]{67FD9A}1029.07190340524 & 4906.24301221167                         \\ \hline
+Spark    &                                          & 4.10795454545455                         & 7.17241379310345                         & 35.4034090909091                         & \cellcolor[HTML]{67FD9A}9320.77174347363 & \cellcolor[HTML]{67FD9A}7221.83235207536 & \cellcolor[HTML]{67FD9A}3017.44391227628 \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n2\_x8\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}5376.56247689464 & \cellcolor[HTML]{67FD9A}4493.01784386617 & \cellcolor[HTML]{67FD9A}5406.84413407821 & 15828.41322616                           & 18999.1075740944                         & 7807.59147129407                         \\ \hline
+Spark    &                                          & 0.892212480660134                        & 1.80051948051948                         & 11.2502651113468                         & 32319.1317641322                         & 28642.2336169982                         & 9776.59511012752                         \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n4\_x1\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}9208.31336622034 & \cellcolor[HTML]{67FD9A}7650.84866515306 & \cellcolor[HTML]{67FD9A}9208.85618100681 & \cellcolor[HTML]{67FD9A}1864.90594402899 & \cellcolor[HTML]{67FD9A}872.857142857143 & \cellcolor[HTML]{67FD9A}629.973012568432 \\ \hline
+Spark    &                                          & 1.70675830469645                         & 3.9495990836197                          & 22.0826636050517                         & 16595.0432314056                         & 13604.8738597043                         & \cellcolor[HTML]{67FD9A}5243.91422227416 \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n4\_x2\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}5083.0700677392  & \cellcolor[HTML]{67FD9A}4171.86825329367 & \cellcolor[HTML]{67FD9A}5254.0934856176  & \cellcolor[HTML]{67FD9A}16218.1368464903 & \cellcolor[HTML]{67FD9A}499.782032705444 & 27854.4848736013                         \\ \hline
+Spark    &                                          & 2.33732876712329                         & 5.01384083044983                         & 27.2170138888889                         & 12541.8374106345                         & 9825.25911136464                         & \cellcolor[HTML]{67FD9A}3721.20620607347 \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n4\_x4\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}8825.00245003224 & \cellcolor[HTML]{67FD9A}7387.03734815198 & \cellcolor[HTML]{67FD9A}8897.76182476092 & \cellcolor[HTML]{67FD9A}3284.87131158196 & \cellcolor[HTML]{67FD9A}382.610634425377 & 6472.52366135097                         \\ \hline
+Spark    &                                          & 3.09714285714286                         & 6.37677053824363                         & 32.752808988764                          & \cellcolor[HTML]{67FD9A}9469.56498604163 & \cellcolor[HTML]{67FD9A}7030.42323685283 & \cellcolor[HTML]{67FD9A}2720.64934032745 \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n4\_x8\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}1176.65731814198 & \cellcolor[HTML]{67FD9A}1852.23063683305 & \cellcolor[HTML]{67FD9A}1382.53546712803 & 34237.3238312429                         & 19055.1666666667                         & 44461.5660592255                         \\ \hline
+Spark    &                                          & 0.757650695517774                        & 2.18836993504485                         & 15.2482225656878                         & \cellcolor[HTML]{67FD9A}31428.8288714711 & 28101.5933059909                         & 9812.29875742842                         \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n8\_x1\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}3677.28770595691 & \cellcolor[HTML]{67FD9A}2962.79001751313 & \cellcolor[HTML]{67FD9A}3592.05783516095 & 318009.129168872                         & \cellcolor[HTML]{67FD9A}1262.60083960119 & \cellcolor[HTML]{67FD9A}771.29125867901  \\ \hline
+Spark    &                                          & 1.09874759152216                         & 3.16180758017493                         & 21.2980068060282                         & 21628.3989673364                         & 18268.3719072365                         & 6969.39617018106                         \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n8\_x2\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}3293.16665384319 & \cellcolor[HTML]{67FD9A}2713.46872139152 & \cellcolor[HTML]{67FD9A}3240.02567418508 & \cellcolor[HTML]{67FD9A}4223.38037608671 & \cellcolor[HTML]{67FD9A}2271.51888335298 & \cellcolor[HTML]{67FD9A}4737.74523029485 \\ \hline
+Spark    &                                          & 1.81303116147309                         & 5.28248587570621                         & 32.0189393939394                         & \cellcolor[HTML]{67FD9A}12935.8142177238 & 10041.5958139964                         & \cellcolor[HTML]{67FD9A}3977.96003946719 \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n8\_x4\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}3643.99029462738 & \cellcolor[HTML]{67FD9A}1955.13460533194 & \cellcolor[HTML]{67FD9A}1683.90825688073 & 51693.4150064683                         & \cellcolor[HTML]{67FD9A}569.368954165612 & 778856.216830933                         \\ \hline
+Spark    &                                          & 2.32819722650231                         & 6.72617246596067                         & 40.58114374034                           & \cellcolor[HTML]{67FD9A}10026.1596979203 & 7610.76036029217                         & \cellcolor[HTML]{67FD9A}2867.36524861277 \\ \cline{1-1} \cline{3-8} 
+Storm    & \multirow{-2}{*}{n8\_x8\_x2\_x1\_x4\_x2} & \cellcolor[HTML]{67FD9A}500.99245852187  & \cellcolor[HTML]{67FD9A}690.335548172758 & \cellcolor[HTML]{67FD9A}912.130870953032 & 25391.7222929936                         & \cellcolor[HTML]{67FD9A}3546.92970521542 & 38895.4339222615                         \\ \hline
+\end{tabular}
+\end{table}
+
+On Table \ref{table:log-processing-results} it is possible to see that Storm did better on all throughput results, while on latency results were more balanced, with Storm doing better on 25 out of 48 results, very close to Spark.
+
+
 \section{Traffic Monitoring}
 
-%\section{Machine Outlier}
-%\section{Sentiment Analysis}
-%\section{Spam Filter}
-%\section{Trending Topics}
-%\section{Click Analytics}
-%\section{Fraud Detection}
-%\section{Spike Detection}
+For the Traffic Monitoring application, 40 different configurations were executed on Storm and a subset of 3 configurations on Spark.
 
+Each configuration is identified by \textbf{n\textit{N}}\_\textbf{x\textit{Source}}\_\textbf{x\textit{MapMatcher}}\_\textbf{x\textit{SpeedCalculator}}\_\textbf{x\textit{Sink}} which is the number of nodes and the number of instances of each operator. If only one \textbf{x\textit{X}} is defined, it means all operators have the same number of instances.
+
+As expected, some experiments show very high latencies (Figure \ref{fig:storm_trafficmonitoring_latency}), with 6 experiments having the 95th percentile of latency above 10 thousand seconds.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_trafficmonitoring/full_latency.pdf}
+	\caption{Storm Traffic Monitoring Latencies}
+	\label{fig:storm_trafficmonitoring_latency}
+\end{figure}
+
+Looking at the best performers on latency there are 15 experiments with results below 20 seconds of latency.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_trafficmonitoring/best_latency.pdf}
+	\caption{Storm Traffic Monitoring Best Latencies}
+	\label{fig:storm_trafficmonitoring_latency_best}
+\end{figure}
+
+The throughput average on Figure \ref{fig:storm_trafficmonitoring_throughput} shows that only the source operator is able to deliver a high throughput.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_trafficmonitoring/full_throughput.pdf}
+	\caption{Storm Traffic Monitoring Throughput}
+	\label{fig:storm_trafficmonitoring_throughput}
+\end{figure}
+
+When looking at the other operators without the source on Figure \ref{fig:storm_trafficmonitoring_throughput2} it is possible to observer that the other operators deliver a verly low throughput, which is something expected for this application, as it is not always able to match a coordinate to a street in a map.
+
+The experiment with the best results was \textbf{n8\_x4} with 35 tuples per second for the three operators.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_trafficmonitoring/throughput2.pdf}
+	\caption{Storm Traffic Monitoring Throughput without the Source Operator}
+	\label{fig:storm_trafficmonitoring_throughput2}
+\end{figure}
+
+On the network usage chart of Figure \ref{fig:storm_trafficmonitoring_network}, the highest usage was that of experiment \textbf{n8\_x4\_x2\_x2}, which suggests that some arrangements of number of operators might lead to more communication among nodes without necessarily increasing the  performance. In fact, it could actually decrease the performance as more time is spent doing communication.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_trafficmonitoring/full_network.pdf}
+	\caption{Storm Traffic Monitoring Network Usage}
+	\label{fig:storm_trafficmonitoring_network}
+\end{figure}
+
+The CPU usage on Figure \ref{fig:storm_trafficmonitoring_cpu_mem} also shows a trend for each node size, with the usage increasing as the number of instances of each operator increases. While the memory seemed more stable, with a few experiments peaking above the 75\% line.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/storm_trafficmonitoring/full_cpu_mem.pdf}
+	\caption{Storm Traffic Monitoring CPU and Memory Usage}
+	\label{fig:storm_trafficmonitoring_cpu_mem}
+\end{figure}
+
+
+The latencies on Spark (Figure \ref{fig:spark_trafficmonitoring_latency}) were extremely high, all of them going over 20 thousand seconds.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/spark_trafficmonitoring/latency.pdf}
+	\caption{Spark Traffic Monitoring Latencies}
+	\label{fig:spark_trafficmonitoring_latency}
+\end{figure}
+
+The throughput on Figure \ref{fig:spark_trafficmonitoring_throughput} shows that Spark did a little better on the \textit{MapMatcher} operator, while on the \textit{SpeedCalculator} and \textit{Sink} the performance was under 10 tuples per second. A comparison of the experiments \textbf{n1\_x4\_x2\_x2}, \textbf{n4\_x2\_x2\_x2} and \textbf{n4\_x8\_x2\_x2} between Spark and Storm also confirms that at the \textit{sink} operator Storm performed a little better than Spark, but the difference was very small.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/spark_trafficmonitoring/throughput.pdf}
+	\caption{Spark Traffic Monitoring Throughput}
+	\label{fig:spark_trafficmonitoring_throughput}
+\end{figure}
+
+The network usage of the experiments on Spark, seen on Figure \ref{fig:spark_trafficmonitoring_network} shows very little traffic happening between the nodes, something compatible with the level of throughput of the application.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/spark_trafficmonitoring/network.pdf}
+	\caption{Spark Traffic Monitoring Network Usage}
+	\label{fig:spark_trafficmonitoring_network}
+\end{figure}
+
+The CPU and memory usage (Figure \ref{fig:spark_trafficmonitoring_cpu_mem}) are much higher for a single node, than for 4 nodes.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=.6\textwidth]{summaries/spark_trafficmonitoring/cpu_mem.pdf}
+	\caption{Spark Traffic Monitoring CPU and Memory Usage}
+	\label{fig:spark_trafficmonitoring_cpu_mem}
+\end{figure}
+
+The results show that this application is not very CPU and network intensive, and it also shows that both Spark and Storm showed similar performance results.
+
+\begin{table}[H]
+\tiny
+\centering
+\caption{Comparison of Traffic Monitoring results}
+\label{table:traffic-monitoring-results}
+\begin{tabular}{|l|l|l|l|l}
+\cline{1-4}
+Platform & Experiment                       & Throughput                               & Latency                                  &  \\ \cline{1-4}
+Spark    &                                  & 9.196423997131                           & 43616859.3358191                         &  \\ \cline{1-1} \cline{3-4}
+Storm    & \multirow{-2}{*}{n1\_x4\_x2\_x2} & \cellcolor[HTML]{67FD9A}15.8215599927611 & \cellcolor[HTML]{67FD9A}12213831.6247981 &  \\ \cline{1-4}
+Spark    &                                  & 5.80584934167926                         & 35302215.9149239                         &  \\ \cline{1-1} \cline{3-4}
+Storm    & \multirow{-2}{*}{n4\_x2\_x2\_x2} & \cellcolor[HTML]{67FD9A}10.17202268431   & \cellcolor[HTML]{67FD9A}504721.903280067 &  \\ \cline{1-4}
+Spark    &                                  & 7.2561553030303                          & 21290498.8742954                         &  \\ \cline{1-1} \cline{3-4}
+Storm    & \multirow{-2}{*}{n4\_x8\_x2\_x2} & \cellcolor[HTML]{67FD9A}9.4453125        & \cellcolor[HTML]{67FD9A}109004.985135135 &  \\ \cline{1-4}
+\end{tabular}
+\end{table}
+
+On Table \ref{table:traffic-monitoring-results} results show that Storm did better on all experiments.
+
+% TODO:
+% improve the conclusion
+
+% revise all chart images, remove duplicate error bars
+
+% include those new references: stream processing benchmark from 2016 on
+% StreamBench: uses wordcount, click stream app and kmeans \citep{wang2016stream}
+% but it compares storm, spark and flink
+% mine has more applications
+
+% RIoTBench: \citep{shukla2016benchmarking} and \citep{shukla2017riotbench}
+% Storm on Azure
+
+% Yahoo Stream Benchmark? 
+
+% Flink Streaming
 
 % -----------------------------------------------------------------------------
 \chapter{Conclusion}
+\label{chapter:conclusion}
+
+Event stream processing is an emerging set of technologies that already encompasses several application areas and system implementations. In this work we introduced a benchmark suite designed specifically to evaluate SPSs, with a wide variety of applications, a well defined set of metrics for the correct interpretation of results and a methodology to guarantee the quality of the results.
+
+The design and development a basic framework to help the execution and collection of results proved esssential for this kind of experiments, as a lot of data is generated and it needs to be processed, summarized and plotted into charts in order for a better understanding of the results obtained.
+
+The results from Chapter \ref{chapter:results} show that the proposed framework provides the necessary tools to properly execute, collect and compare stream processing frameworks.
+
+In the future, the comparison of SPSs could be expanded to encompass more platforms as well as the whole set of applications defined in the benchmark. In addition, a more extensive analysis of the metrics could lead to a new set of metrics derived from the basic metrics defined in this benchmark.
 
 
-
-
-\bibliographystyle{acm}
+\bibliographystyle{abntex2-alf}
 \bibliography{bibliography}
 
 \end{document}
