@@ -85,15 +85,7 @@
 
 % abstract
 \begin{abstract}
-Recently a new application domain characterized by the continuous and low-latency
-  processing of large volumes of data has been gaining attention. The growing number
-  of applications of such genre has led to the creation of \emph{Stream Processing Systems} (SPSs), 
-  systems that abstract details that have no direct relation to the problem at hand.
-  More recently, the ever increasing volumes of data to be processed gave rise to 
-  distributed SPSs. Currently there are in the market several distributed SPSs, however 
-  the existing benchmarks designed for evaluating this kind of system cover only a few applications and workloads, while these systems have a much wider set of applications. 
-  This project proposes a benchmark suite composed of applications from diverse areas 
-  with the purpose of testing SPSs with different workloads and scenarios. This suite was evaluated against Storm and Spark on the Azure Platform and the results have demonstrated the usefulness of the benchmark suite in comparing these systems.
+Recently a new application domain characterized by the continuous and low-latency processing of large volumes of data has been gaining attention. The growing number of applications of such genre has led to the creation of \emph{Stream Processing Systems} (SPSs), systems that abstract the details of real-time applications from the developer. More recently, the ever increasing volumes of data to be processed gave rise to distributed SPSs. Currently there are in the market several distributed SPSs, however the existing benchmarks designed for the evaluation this kind of system covers only a few applications and workloads, while these systems have a much wider set of applications. In this work a benchmark for stream processing systems is proposed. Based on a survey of several papers with real-time and stream applications, the most used applications and areas were outlined, as well as the most used metrics in the performance evaluation of such applications. With these information the metrics of the benchmark were selected as well as a list of possible application to be part of the benchmark. Those passed through a workload characterization in order to select a diverse set of applications. To ease the evaluation of SPSs a framework was created with an API to generalize the application development and collect metrics, with the possibility of extending it to support other platforms in the future. To prove the usefulness of the benchmark, a subset of the applications were executed on Storm and Spark using the Azure Platform and the results have demonstrated the usefulness of the benchmark suite in comparing these systems.
 \end{abstract}
 
 
@@ -106,21 +98,21 @@ Recently a new application domain characterized by the continuous and low-latenc
 % main contributions of the work
 % organization of the rest of the document
 
-A data by itself holds no value unless it has been interpreted, contextualized and aggregated with other data, then it has a value, which makes of it an information. In some classes of applications the value is not only on the information, but also on the speed with which it's obtained. High Frequency Trading (HFT) are a great example of applications where the profitability is directly proportional to the latency \cite{Loveless:2013:OAH:2507771.2507780}. With the evolution of hardware and data processing tools many applications that in the past took hours to give a response to a query, now need to answer in a matter of minutes or seconds \cite{barlow2013real}. 
+A data by itself holds no value unless it has been interpreted, contextualized and aggregated with other data, then it has a value, which makes of it an information. In some classes of applications the value is not only on the information, but also on the speed with which it's obtained. High Frequency Trading (HFT) is a great example of applications where the profitability is directly proportional to the latency \cite{Loveless:2013:OAH:2507771.2507780}. With the evolution of hardware and data processing tools many applications that in the past took hours to give a response to a query, now need to answer in a matter of minutes or seconds \cite{barlow2013real}. 
 
 This kind of application has as a characteristic, beyond the need for real-time or near real-time processing, the continuous ingestion of large and unbounded volumes of data in the shape of tuples or events. The growing demand for applications that would meet these requirements led to the creation of systems that provide a programming model that take away from the programmer the responsability with respect to details such as scheduling, fault tolerance, processing and optimization of queries. These systems are know as Stream Processing Systems (SPS), Data Stream Management Systems (DSMS) \cite{chakravarthy2009stream} or Stream Processing Engines (SPE) \cite{abadi2005design}.
 
-Lately these systems adopted a distributed architecture as a way to deal with ever increasing volumes of data \cite{zaharia2012discretized}. Among them are S4, Storm, Spark Streaming and more recently Samza.
+Lately these systems adopted a distributed architecture as a way to deal with ever increasing volumes of data \cite{zaharia2012discretized}. Among them are S4, Storm, Spark Streaming, Flink Streaming and more recently Samza and Apache Beam.
 
 These systems model the data processing through a data flow graph with the vertices being the operators and the edges the data streams. But the similarities don't go much further, as each of these systems has different mechanisms for fault tolerance and recovery, scheduling and parallelism of operators, and communication patterns.
 
-In this scenario it would be useful to have a tool for comparing these systems under different workloads, to assist in the selection of the most suited for an specific job. We propose a benchmark suite composed of applications from different fields of applications, as well as a methodology for evaluating distributed SPSs.
+In this scenario it would be useful to have a tool for comparing these systems under different workloads, to assist in the selection of the most suited for a specific job. We propose a benchmark suite composed of applications from different fields of applications, as well as a methodology for evaluating distributed SPSs.
 
 \section{Motivation}
 
 Recently a new application domain characterized by the continuous and low-latency processing of large volumes of data has been gaining attention. The growing number of applications of such genre has led to the creation of \emph{Stream Processing Systems} (SPSs), systems that abstract details that have no direct relation to the problem at hand.
 
-More recently, the ever increasing volumes of data to be processed gave rise to distributed SPSs. Currently there are in the market several distributed SPSs, however the few benchmarks that currently exist for these systems use only synthetic or very simple applications
+More recently, the ever increasing volumes of data to be processed gave rise to distributed SPSs. Currently there are in the market several distributed SPSs, however the benchmarks that currently exist for these systems use only synthetic, very simple applications or only applications from a few areas.
 
 \section{Goals}
 
@@ -189,9 +181,9 @@ In Section \ref{sec:esp:platforms}, the main platforms for stream processing are
 
 Stream processing technologies have been created to fulfill a set of requirements for a growing class of applications. Among these requirements, the most proeminent is the need for processing data in real time (or near real-time) and producing results in a timely fashion.
 
-In a paper by Stonebraker, {\c{C}}etintemel and Zdonik \cite{stonebraker20058}, they also include as requirements the need to process data \emph{in-memory} in order to keep the latency low (1), the support for a high-level query language (2), the ability to handle data imperfections (delays, missing and out-of-order data)(3), the generation of predictable and repeatable outcomes (4), the integration of real-time and stored data (5), the guaratee of data safety and system availability (6), the automatic partition and scalability of applications (7), and the last requirement is the one mentioned in the beginning of this section.
+In a paper by Stonebraker, {\c{C}}etintemel and Zdonik \cite{stonebraker20058}, they also include as requirements the need to process data \emph{in-memory} in order to keep the latency low (1), the support for a high-level query language (2), the ability to handle data imperfections (delays, missing and out-of-order data)(3), the generation of predictable and repeatable outcomes (4), the integration of real-time and stored data (5), the guarantee of data safety and system availability (6), the automatic partition and scalability of applications (7), and the last requirement is the one mentioned in the beginning of this section.
 
-To complement the requirements above, Chakravarthy \cite{chakravarthy2009stream} also notes that an SPS has to be able to cope with the unpredicability of data stream rates and also the large amount of data that may be required to be processed. Many applications have also very specific QoS requirements that must be met, such as response time (latency), precision, throughput and memory usage. The precision is regarding the results, which means that some applications are willing to have approximate results in order to increase or sustain other QoS requirement.
+To complement the requirements above, Chakravarthy \cite{chakravarthy2009stream} also notes that an SPS has to be able to cope with the unpredicability of data stream rates and also the large amount of data that may be required to be processed. Many applications have also very specific QoS requirements that must be met, such as response time (latency), precision, throughput and memory usage. The precision is regarding the results, which means that some applications are willing to have approximate results in order to increase or sustain other QoS requirements.
 
 
 \section{Concepts}
@@ -213,11 +205,11 @@ An operator, according to Andrade, Gedik and Turaga \cite{andrade2014fundamental
 Some of the more common tasks performed by operators are:
 
 \begin{itemize}
-\item Parsing/Filtering/ETL
-\item Aggregation: collection and summarization of tuples
-\item Merging: combining of streams with different schemas
-\item Splitting: partitioning of stream into multiple ones for data/task parallelism of some logical reason
-\item Data mining/Machine Learning/Natural Language Processing: spam filtering, fraud detection, recommendation systems, clustering, sentiment analysis.
+\item Parsing/Filtering/ETL;
+\item Aggregation: collection and summarization of tuples;
+\item Merging: combining of streams with different schemas;
+\item Splitting: partitioning of stream into multiple ones for data/task parallelism of some logical reason;
+\item Data mining/Machine Learning/Natural Language Processing: spam filtering, fraud detection, recommendation systems, clustering, sentiment analysis;
 \item Others: relational algebra, artificial intelligence, computer vision, and other custom operations.
 \end{itemize}
 
@@ -230,10 +222,10 @@ Stream processing applications (SPAs) are also bound to other restrictions, such
 These aproximate operators are usually based on \emph{synopsis structures} \cite{aggarwal2007survey}. The main examples of synopsis structures and their practical use are:
 
 \begin{itemize}
-\item Sampling: classification, query estimation, order statistics estimation, distinct value queries.
-\item Wavelets: hierarchical decomposition and summarization.
-\item Clustering: knowledge discovery
-\item Sketches: distinct count, heavy hitters, quantiles, change detection.
+\item Sampling: classification, query estimation, order statistics estimation, distinct value queries;
+\item Wavelets: hierarchical decomposition and summarization;
+\item Clustering: knowledge discovery;
+\item Sketches: distinct count, heavy hitters, quantiles, change detection;
 \item Histograms: range queries, selectivity estimation.
 \end{itemize}
 
@@ -307,9 +299,9 @@ Among the first SPSs developed the most notable are the TelegraphCQ, developed a
 
 The \emph{second generation} went a step further, with systems working on very large networks, mainly for processing data from sensor networks, which means that the processing must occur in a distributed fashion.
 
-In this period a lot of research was built on all aspects surrounding SPSs, such as job and resource management, scheduling, load balancing, high availability, monitoring, fault tolerance, QoS, visualization, stream algorithms and query languages. In comparison with the the first geeration, now the systems have a much wider range of operators, as well as the hability to build custom operators.
+In this period a lot of research was built on all aspects surrounding SPSs, such as job and resource management, scheduling, load balancing, high availability, monitoring, fault tolerance, QoS, visualization, stream algorithms and query languages. In comparison with the the first geeration, now the systems have a much wider range of operators, as well as the hability to build custom operators. Examples from this generation are: Borealis, CEDR, System S and CAPE.
 
-In the \emph{third generation} there is a shift towards massively-parallel systems, working on clusters instead of very large networks. These systems also favor general purpose languages instead of DSLs (Domain Specific Languages), giving the developer a wide range of possibilities for building applications. The focus is now on processing large volumes of data as fast as possible using clusters of computing nodes, usually with Cloud Computing.
+In the \emph{third generation} there is a shift towards massively-parallel systems, working on clusters instead of very large networks. These systems also favor general purpose languages instead of DSLs (Domain Specific Languages), giving the developer a wide range of possibilities for building applications. The focus is now on processing large volumes of data as fast as possible using clusters of computing nodes, usually with Cloud Computing. Examples from the third generation are: S4, Storm, Spark Streaming, Flink Streaming, Samza and Apex.
 
 \begin{figure}[!ht]
 	\centering
@@ -384,7 +376,7 @@ According to Bockermann \cite{bockermann2014survey} a \emph{queueing} or \emph{m
 
 Systems such as S4 used to rely solely on TCP, changing later to the Netty library. Storm did something similar, changing from ZeroMQ to Netty. And while these systems rely on libraries to handle their communication, some systems prefer to use a middleware, as is the case of Apache Samza which uses Kafka as its message system. Other examples of middlewares are RabbitMQ and ActiveMQ.
 
-Kafka, middlewares (netty), etc.
+% Kafka, middlewares (netty), etc.
 
 \section{Platforms}
 \label{sec:esp:platforms}
@@ -635,6 +627,44 @@ The datasets used by the benchmark suite are from real world scenarios and they 
 As most of the works below, they chose the \textbf{average} \emph{throughput} and \emph{latency} as main metrics, and the penalties incurred from failures in this two metrics. They have done experiments to compare Storm and Spark Streaming in a cluster of 6 nodes, using Apache Kafka as the message system in a cluster of 6 nodes, with 5 of them as brokers. They fail, however, to present the standard deviation of the results measured, something essential for the comparison of systems known for their high variability in latency and throughput.
 
 
+% Yahoo Streaming Benchmark \cite{yahoo2015bench}
+% Ad campaign events processing application
+% For Storm, Spark, Flink and Apache Apex
+Another benchmark for SPSs was Yahoo Streaming Benchmark \cite{yahoo2015bench}, composed of an Ad campaign stream application and implementations for Storm, Spark, Flink and Apex systems. They analyze the throughput and 99th percentile of latency on those platforms with their default set-up configurations. Results showed that Storm had a great performance and a throughput almost as good as Flink and with some optimizations it could achieve an even better performance.
+
+
+% BigDataBench \cite{wang2014bigdatabench}
+% BigDataBench has five applications for the evaluation of streaming systems: grep, search, rolling top words, k-means and collaborative filtering (for e-commerce).
+A later work on bechmarking Big Data systems is BigDataBench \cite{wang2014bigdatabench}, with a wide range of applications from multiple areas. It also has a subset of five micro-benchmarks specific for streaming systems: \textit{grep}, \textit{search}, \textit{rolling top words}, \textit{k-means} and \textit{collaborative filtering} (for e-commerce).
+
+It provides the specification of all benchmark applications as well as the data inputs, but it is not a framework in the sense that it does not provide an API that can be extended for building new benchmarks. The micro-benchmarks have been implemented for JStorm and Spark.
+
+% micro-benchmark, which platforms? has framework?
+
+
+% StreamBench \cite{wang2016stream}
+% StreamBench defines an extensible framework for SPS evaluation, but the applications need to be rewritten for each new platform that is going to be tested. Furthermore, the benchmark only defines three applications: AdvClick, for clickstream analysis with correlation between ads and clicks on those ads; WordCount; and K-Means, applied to a stream of points with a pre-defined set of centroids. Those three applications are evaluated on Storm, Spark and Flink, using latency and throughput as metrics.
+% covers only micro-benchmarks, not real world and complex applications, inputs are also not realistic
+
+Another work specific for SPSs is StreamBench \cite{wang2016stream} (not the same as \cite{lu2014stream}), an extensible framework for the evaluation of these systems. The benchmark defines three micro-benchmarks: \textbf{AdvClick}, for clickstream analysis with correlation between ads and clicks on those ads; \textbf{WordCount}; and \textbf{K-Means}, applied to a stream of points with a pre-defined set of centroids.
+
+The benchmark provides implementations of those applications for Storm, Spark and Flink, using the latency and throughput as evaluation metrics. One downside of the framework is the fact that applications need to be implemented for each platform separately. In addition, these applications do not represent real world and complex applications, and they don't use realistic inputs.
+
+
+% \cite{shukla2017riotbench}
+% RIoTBench
+
+A different approach is taken by RIoTBench \cite{shukla2017riotbench}, they focus on IoT (Internet of Things) applications, defining 27 tasks that can be combined to create micro-benchmarks (they define four of such). They have evaluated the benchmark against Storm regarding the throughput, latency, resource usage and a new metric called \textit{jitter}, which tracks the variation between the expected and actual output throughput.
+
+
+% HiBench \cite{huang2010hibench}
+% Defines four micro-benchmarks: wordcount, fixed window, identity and repartition.
+% For Storm, Spark and Flink
+
+Another benchmark for Big Data systems is HiBench \cite{huang2010hibench}, originally it defined a set of synthetic, micro-benchmarks and real world applications for MapReduce (batch processing), specifically Hadoop. They used the benchmark to characterize Hadoop in terms of speed, throughput, bandwidth of HDFS, resource utilization and data access patterns.
+
+Only recently they have added support for streaming platforms, defining four micro-benchmarks: \textit{wordcount}, \textit{fixed window}, \textit{identity} and \textit{repartition}. Those applications have been implemented for Storm, Spark and Flink.
+
 
 \subsection{SPS Comparisons}
 
@@ -711,7 +741,7 @@ The Table \ref{table:related_work_metrics} summarizes the metrics used by the wo
 \begin{center}
 	\tiny
 	\centering
-	\begin{tabular}{ | l | >{\centering\arraybackslash}p{1.5cm} | c | c | >{\centering\arraybackslash}p{1cm} | c | >{\centering\arraybackslash}p{1.5cm} | >{\centering\arraybackslash}p{1.5cm} | >{\centering\arraybackslash}p{1.5cm} |}
+	\begin{tabular}{ | l | c | c | c | >{\centering\arraybackslash}p{0.5cm} | c | >{\centering\arraybackslash}p{0.7cm} | >{\centering\arraybackslash}p{0.7cm} | >{\centering\arraybackslash}p{1.5cm} |}
    		\hline
         \textbf{Work} & \textbf{Scalability} & \textbf{Latency} & \textbf{Throughput} & \textbf{Tuple Loss} & \textbf{Runtime} & \textbf{Resource Usage} & \textbf{Recovery Time} & \textbf{Other} \\\hline
    		
@@ -733,6 +763,14 @@ The Table \ref{table:related_work_metrics} summarizes the metrics used by the wo
 		\cite{scharrenbach2013seven} & & \textbullet & \textbullet & & & & & recall, precision, error rate\\\hline
 		\cite{bizarro2007bicep} & \textbullet & \textbullet & & & & & & adaptivity, precision, recall, computation sharing \\\hline
 		\cite{lu2014stream} & \textbullet & \textbullet & \textbullet & & & & & \\\hline
+		
+		% new papers
+		\cite{yahoo2015bench} &  & \textbullet & \textbullet & & & & & \\\hline
+		\cite{wang2014bigdatabench} &  &  & \textbullet & & & & & \\\hline
+		\cite{wang2016stream} &  & \textbullet & \textbullet & & & & & \\\hline
+		\cite{shukla2017riotbench} &  & \textbullet & \textbullet & & & \textbullet & & jitter\\\hline
+		\cite{huang2010hibench} &  &  & \textbullet & & \textbullet & \textbullet & & \\\hline
+		
 	\end{tabular}
 	\vspace{5px}
 	\caption{Related work metrics}
@@ -781,6 +819,14 @@ In stream processing there are two basic aspects that characterize an applicatio
 As for the communication patterns, in an SPS an operator can basically send\footnote{At the description of the application it is the subscriber who actually chooses the communication pattern, but at runtime the pattern is usually employed at the publisher.} a tuple to all subscribers (\emph{broadcast}), to a random subscriber (\emph{shuffle}), always to the same subscriber based on values of the tuple (\emph{group by}) or to a specific subscriber (see Section \ref{sec:esp:concepts}).
 
 This is a very high-level characterization of the communication pattern, one that can be realized through source code analysis. But there is a more detailed characterization, obtained by means of instrumentation, that describes the \emph{temporal}, \emph{spatial} and \emph{volume} attributes of the communication \cite{kim1998characterization}, obtained by the observation of the distributions of message generation rates, message destinations, and message sizes and average number of messages, respectively.
+
+\section{Final Considerations}
+
+In this chapter we introduced the basic requirements and concepts of Event-Stream Processing, a brief history of Stream Processing Systems, the main techniques for operator placement, load balancing and fault tolerance and an introduction to the main SPSs.
+
+And at section \ref{sec:esp:performance_evaluation} we have given an overview of other works that propose benchmarks for SPSs or similar systems, as well as works that do comparisons and performance tests of these systems, as well as use cases with SPSs. In the end we summarize the metrics used by those works in order to select the most relevant for the evaluation of SPSs.
+
+The concepts and research approached on the sections above, together with the research introduced on section \ref{sec:esp:workload_characterization} about workload characterization were a key for the construction of the benchmark suite, depicted on the next chapter.
 
 % -----------------------------------------------------------------------------
 \chapter{Model}
@@ -872,18 +918,6 @@ Along with the areas of application listed above, perhaps a more important crite
 
 Table \ref{table:papers_analysis} shows the list of papers evaluated with the respective areas that the applications fall into and the techniques used to develop them. In the cases where more than one application is used, the areas and techniques are numbered to differentiate them.
 
-Apart from the other areas of applications, \textbf{synthetic} applications fall into this category because they are either too simple (at most two operators), don't produce any valuable information or have no use in real world applications.
-
-
-
-%TODO pie chart with number of papers per area
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.8\textwidth]{images/ApplicationSelection.pdf}
-	\caption{Relevance of application areas in the searched papers.}
-	\label{fig:app_selection_areas}
-\end{figure}
-
 
 %With a list of possible applications drawn from these areas, it was necessary to choose which ones were more relevant for the benchmark suite, discarding those with very similar behavior. Task that was accomplished through workload characterization.
 
@@ -897,9 +931,12 @@ Apart from the other areas of applications, \textbf{synthetic} applications fall
 		SPADE: the system s declarative stream processing engine \cite{gedik2008spade} & 2008 & Finance, Sensor Network & Mathematics \\\hline
 		Scale-up strategies for processing high-rate data streams in System S \cite{andrade2009scale} & 2009 & Finance & \\\hline
 		Stream data processing: a quality of service perspective \cite{chakravarthy2009stream} & 2009 & Network Monitoring & \\\hline
+		
 		Adaptive multimedia mining on distributed stream processing systems \cite{turaga2010adaptive} & 2010 & Synthetic & Computer Vision \\\hline
 		From a stream of relational queries to distributed stream processing \cite{zou2010stream} & 2010 & Traffic Monitoring, Social Network & Graph Processing \\\hline
 		S4: Distributed stream computing platform \cite{neumeyer2010s4} & 2010 & Advertising & Reinforcement Learning \\\hline
+		The HiBench Benchmark Suite: Characterization of the MapReduce-Based Data Analysis \cite{huang2010hibench} & 2010 & Synthetic & \\\hline
+		
 		A performance study on operator-based stream processing systems \cite{dayarathna2011performance} & 2011 & Finance (1), Social Network (2), Telecom (3), Synthetic (4) & Ranking (2), Mathematics (1, 3) \\\hline
 		Adaptive rate stream processing for smart grid applications on clouds \cite{simmhan2011adaptive} & 2011 & Sensor Network & \\\hline
 		Design and evaluation of a real-time url spam filtering service \cite{thomas2011design} & 2011 & Social Network & Classification \\\hline
@@ -931,6 +968,15 @@ Apart from the other areas of applications, \textbf{synthetic} applications fall
 		Of Streams and Storms \cite{nabi2014streams} & 2014 & Social Network & \\\hline
 		On the application of Big Data in future large scale intelligent Smart City installations \cite{girtelschmid2014application} & 2014 & Sensor Network & \\\hline
 		Scalable stateful stream processing for smart grids \cite{fernandez2014scalable} & 2014 & Sensor Network & \\\hline
+		
+		BigDataBench: a Big Data Benchmark Suite from Internet Services \cite{wang2014bigdatabench} & 2014 & Social Network, E-Commerce, Search Engine & \\\hline
+		
+		Benchmarking Streaming Computation Engines at Yahoo! \cite{yahoo2015bench} & 2015 & Advertising & \\\hline
+		
+		Stream Processing Systems Benchmark: StreamBench \cite{wang2016stream} & 2016 & Advertising, Synthetic & Machine Learning \\\hline
+		
+		RIoTBench: A Real-time IoT Benchmark for Distributed Stream Processing Platforms \cite{shukla2017riotbench} & 2017 & Sensor Network & \\\hline
+		
 	
 	\caption{Papers analysed for selection of applications}
 	\label{table:papers_analysis}
@@ -938,10 +984,24 @@ Apart from the other areas of applications, \textbf{synthetic} applications fall
 \end{center}
 %\end{table}
 
+Apart from the other areas of applications, \textbf{synthetic} applications fall into this category because they are either too simple (at most two operators), don't produce any valuable information or have no use in real world applications.
+
+% pie chart with number of papers per area
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/ApplicationSelection.pdf}
+	\caption{Relevance of application areas in the searched papers.}
+	\label{fig:app_selection_areas}
+\end{figure}
+
+Figure \ref{fig:app_selection_areas} shows the representation of each application area in the researched papers.
+
 
 
 \section{Applications}
 \label{sec:applications}
+
+In this section is list all applications that compose the benchmark suite as well as a description of each one of them and a chart displaying the data flow of the application with streams, operators and sinks.
 
 \subsection{Word Count (WC)}
 
@@ -1879,9 +1939,17 @@ Event stream processing is an emerging set of technologies that already encompas
 
 The design and development a basic framework to help the execution and collection of results proved esssential for this kind of experiments, as a lot of data is generated and it needs to be processed, summarized and plotted into charts in order for a better understanding of the results obtained.
 
-The results from Chapter \ref{chapter:results} show that the proposed framework provides the necessary tools to properly execute, collect and compare stream processing frameworks.
+The results from Chapter \ref{chapter:results} show that the proposed framework provides the necessary tools to properly execute, collect and compare stream processing frameworks. Specifically, the results showed that Storm has a better performance than Spark when it comes to throughput, even though Spark uses micro-batches. But on latency the results showed more balanced results between Storm and Spark.
 
-In the future, the comparison of SPSs could be expanded to encompass more platforms as well as the whole set of applications defined in the benchmark. In addition, a more extensive analysis of the metrics could lead to a new set of metrics derived from the basic metrics defined in this benchmark.
+In the end, the configuration of the number of instances of each operator was key to a good performance. And this work showed that knowing beforehand the selectivity of each operator was helpful in the selection of good configurations.
+
+As opposed to previous works, we have defined a set of applications from several areas, ranging different types of workloads, communication patterns and inputs from real world. We have also defined a framework in order to help the development and benchmarking of stream applications without the necessity of rewriting the application for each platform.
+
+In the future, the comparison of SPSs could be expanded to encompass more platforms as well as the whole set of applications defined in the benchmark. In addition, a more extensive analysis of the metrics could have been done, which could lead to a new set of metrics derived from the basic metrics defined in this benchmark.
+
+Future comparisons could also try to introduce failures to analyse the resilience of these systems, as well as the tuple loss in order to know how much load a system can take without loosing information.
+
+The stream processing landscape is full of challenges and it has plentiful of new platforms, thus having a benchmark capable of evaluating them in meaningful ways is going to be very useful.
 
 
 \bibliographystyle{abntex2-alf}
