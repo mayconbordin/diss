@@ -53,7 +53,7 @@
         \item[NUMA] Non-Uniform Memory Access
         \item[SIMD] Single Instruction Multiple Data
         \item[SPMD] Single Program Multiple Data
-        \item[ABNT] Associao Brasileira de Normas Tcnicas
+        \item[ABNT] Associação Brasileira de Normas Técnicas
         
         
         \item[SPS] Stream Processing System
@@ -100,7 +100,7 @@ Recently a new application domain characterized by the continuous and low-latenc
 
 A data by itself holds no value unless it has been interpreted, contextualized and aggregated with other data, then it has a value, which makes of it an information. In some classes of applications the value is not only on the information, but also on the speed with which it's obtained. High Frequency Trading (HFT) is a great example of applications where the profitability is directly proportional to the latency \cite{Loveless:2013:OAH:2507771.2507780}. With the evolution of hardware and data processing tools many applications that in the past took hours to give a response to a query, now need to answer in a matter of minutes or seconds \cite{barlow2013real}. 
 
-This kind of application has as a characteristic, beyond the need for real-time or near real-time processing, the continuous ingestion of large and unbounded volumes of data in the shape of tuples or events. The growing demand for applications that would meet these requirements led to the creation of systems that provide a programming model that take away from the programmer the responsability with respect to details such as scheduling, fault tolerance, processing and optimization of queries. These systems are know as Stream Processing Systems (SPS), Data Stream Management Systems (DSMS) \cite{chakravarthy2009stream} or Stream Processing Engines (SPE) \cite{abadi2005design}.
+This kind of application has as a characteristic, beyond the need for real-time or near real-time processing, the continuous ingestion of large and unbounded volumes of data in the shape of tuples or events. The growing demand for applications that would meet these requirements led to the creation of systems that provide a programming model that take away from the programmer the responsibility with respect to details such as scheduling, fault tolerance, processing and optimization of queries. These systems are know as Stream Processing Systems (SPS), Data Stream Management Systems (DSMS) \cite{chakravarthy2009stream} or Stream Processing Engines (SPE) \cite{abadi2005design}.
 
 Lately these systems adopted a distributed architecture as a way to deal with ever increasing volumes of data \cite{zaharia2012discretized}. Among them are S4, Storm, Spark Streaming, Flink Streaming and more recently Samza and Apache Beam.
 
@@ -116,9 +116,9 @@ More recently, the ever increasing volumes of data to be processed gave rise to 
 
 \section{Goals}
 
-The main goal of this work is the creation of a benchmark suite for SPSs composed of applications from different areas, workloads and dataloads, defining metrics for the measurement of the performance, scalability and reliability, and scenarios with the occurrence of failures and bursts in the volume of data. With this benchmark suite we expect to provide a reference point so that people interested in using an SPS can choose the one that better fits its needs.
+The main goal of this work is the creation of a benchmark suite for SPSs composed of applications from different areas, workloads and data loads, defining metrics for the measurement of the performance, scalability and reliability, and scenarios with the occurrence of failures and bursts in the volume of data. With this benchmark suite we expect to provide a reference point so that people interested in using an SPS can choose the one that better fits its needs.
 
-The second goal is to apply the benchmark suite in a comparison between the main distributed SPSs in the market. Through this comparison we expect to demonstrate the usefullness of this benchmark suite, as well as provide a reference implementation of the benchmark so that it can be applied in other SPSs.
+The second goal is to apply the benchmark suite in a comparison between the main distributed SPSs in the market. Through this comparison we expect to demonstrate the usefulness of this benchmark suite, as well as provide a reference implementation of the benchmark so that it can be applied in other SPSs.
 
 \section{Contributions}
 
@@ -132,7 +132,7 @@ This research work expects to contribute with:
       Or at least improve the way these systems are evaluated, with higher quality benchmarks that can better show how they perform in different scenarios.
       
 \item \textbf{Provide a defined set of applications for benchmarking}.\\
-      As well as a reference implementation for those aplications, so that they can be reproduced in other SPSs.
+      As well as a reference implementation for those applications, so that they can be reproduced in other SPSs.
       
 
 \end{itemize}
@@ -172,18 +172,18 @@ At last, in Chapter \ref{chapter:conclusion}, are the conclusions of this resear
 
 This chapter introduces the requirements and concepts that govern Stream Processing Systems (SPSs), also known as Event-Stream Processing (ESP) or Stream Processing Engines (SPEs), in Sections \ref{sec:esp:requirements} and \ref{sec:esp:concepts}, respectively. Section \ref{sec:esp:history} traces the history of SPSs back to the first Data Stream Management Systems (DSMSs), Complex Event Processing systems (CEPs), Continuous Queries and Active Databases.
 
-In sequence, the architectural aspects of SPSs are explored, including tecniques for scheduling and load balancing jobs and tasks within jobs to Processing Elements (PEs) (Section \ref{sec:esp:scheduling_load_balancing}), the methods employed for guaranteeing that messages are processed and the operator's state is not lost in a failure (Section \ref{sec:esp:fault_tolerance}), as well as the different data transportation middlewares and communication patterns used (Section \ref{sec:esp:data_transport}).
+In sequence, the architectural aspects of SPSs are explored, including techniques for scheduling and load balancing jobs and tasks within jobs to Processing Elements (PEs) (Section \ref{sec:esp:scheduling_load_balancing}), the methods employed for guaranteeing that messages are processed and the operator's state is not lost in a failure (Section \ref{sec:esp:fault_tolerance}), as well as the different data transportation middlewares and communication patterns used (Section \ref{sec:esp:data_transport}).
 
 In Section \ref{sec:esp:platforms}, the main platforms for stream processing are described in detail, with the differences among them being highlighted. And lastly, the state of the art on benchmarking and performance evaluation of SPSs is investigated (Section \ref{sec:esp:performance_evaluation}).
 
 \section{Requirements}
 \label{sec:esp:requirements}
 
-Stream processing technologies have been created to fulfill a set of requirements for a growing class of applications. Among these requirements, the most proeminent is the need for processing data in real time (or near real-time) and producing results in a timely fashion.
+Stream processing technologies have been created to fulfil a set of requirements for a growing class of applications. Among these requirements, the most prominent is the need for processing data in real time (or near real-time) and producing results in a timely fashion.
 
 In a paper by Stonebraker, {\c{C}}etintemel and Zdonik \cite{stonebraker20058}, they also include as requirements the need to process data \emph{in-memory} in order to keep the latency low (1), the support for a high-level query language (2), the ability to handle data imperfections (delays, missing and out-of-order data)(3), the generation of predictable and repeatable outcomes (4), the integration of real-time and stored data (5), the guarantee of data safety and system availability (6), the automatic partition and scalability of applications (7), and the last requirement is the one mentioned in the beginning of this section.
 
-To complement the requirements above, Chakravarthy \cite{chakravarthy2009stream} also notes that an SPS has to be able to cope with the unpredicability of data stream rates and also the large amount of data that may be required to be processed. Many applications have also very specific QoS requirements that must be met, such as response time (latency), precision, throughput and memory usage. The precision is regarding the results, which means that some applications are willing to have approximate results in order to increase or sustain other QoS requirements.
+To complement the requirements above, Chakravarthy \cite{chakravarthy2009stream} also notes that an SPS has to be able to cope with the unpredictability of data stream rates and also the large amount of data that may be required to be processed. Many applications have also very specific QoS requirements that must be met, such as response time (latency), precision, throughput and memory usage. The precision is regarding the results, which means that some applications are willing to have approximate results in order to increase or sustain other QoS requirements.
 
 
 \section{Concepts}
@@ -215,11 +215,11 @@ Some of the more common tasks performed by operators are:
 
 According to Gulisano et al \cite{gulisano2010streamcloud}, operators can be classified as stateless and stateful. Stateless operators only need the current tuple in order to produce any results (e.g. map, filter), while stateful operators need more than one tuple (e.g. join, aggregation). Stateful operators can be further classified as either blocking or non-blocking. A non-blocking operator is one which, although storing data about past tuples, can produce results after each new tuple processed.
 
-A blocking operator, on the other hand, requires the whole dataset in order to produce a result, such is the case of a join or frequent itemset operator. But since a data stream is unbounded in size it is impossible for such operator to ever produce any results. To overcome this restriction tuples can be grouped in windows based on a range of time units or a number of tuples. Each window has a start ($W_s$), an end ($W_e$) and an advance parameter ($Advance$). Different comfigurations for these parameters may create windows of fixed or variable size, with or without overlap between windows \cite{gulisano2012streamcloud}.
+A blocking operator, on the other hand, requires the whole dataset in order to produce a result, such is the case of a join or frequent itemset operator. But since a data stream is unbounded in size it is impossible for such operator to ever produce any results. To overcome this restriction tuples can be grouped in windows based on a range of time units or a number of tuples. Each window has a start ($W_s$), an end ($W_e$) and an advance parameter ($Advance$). Different configurations for these parameters may create windows of fixed or variable size, with or without overlap between windows \cite{gulisano2012streamcloud}.
 
 Stream processing applications (SPAs) are also bound to other restrictions, such as the limited processing time and memory, as they need to produce results in a timely manner and to do so they must keep all data in memory, which is limited (and small if compared to the hard disk), and the amount of processing lean. For some applications these requirements were so important that they were willing to trade the accuracy of the results for a smaller latency (time between ingestion of a tuple and production of results).
 
-These aproximate operators are usually based on \emph{synopsis structures} \cite{aggarwal2007survey}. The main examples of synopsis structures and their practical use are:
+These approximate operators are usually based on \emph{synopsis structures} \cite{aggarwal2007survey}. The main examples of synopsis structures and their practical use are:
 
 \begin{itemize}
 \item Sampling: classification, query estimation, order statistics estimation, distinct value queries;
@@ -237,7 +237,7 @@ In stream processing an application is usually composed as a flow graph with nod
 
 \begin{itemize}
 \item DAG (Directed Acyclic Graph): a directed graph without cycles.
-\item Actors model: an actor is a computational entity that can respond to a message by sending messages to other actors, creating new actors and designating the bahavior for the next message it receives, all in parallel.
+\item Actors model: an actor is a computational entity that can respond to a message by sending messages to other actors, creating new actors and designating the behaviour for the next message it receives, all in parallel.
 \item Monad: originated from functional programming, it is a structure that represents a chain of operations.
 \end{itemize}
 
@@ -262,7 +262,7 @@ The most common partitioning configurations are:
 	\label{fig:sps_parallelism}
 \end{figure}
 
-At last, the \emph{task parallelism} is closely related to the nature of SPAs, as they are a composition of tasks that, in many cases, work in parallel. But even if the task parallelism is almost unavoidable in an SPA, it is paramount to ensure the balance between these tasks in order to improve the performace and avoid waste of resources, such as extra memory usage due to large queues of tuples waiting to be merged.
+At last, the \emph{task parallelism} is closely related to the nature of SPAs, as they are a composition of tasks that, in many cases, work in parallel. But even if the task parallelism is almost unavoidable in an SPA, it is paramount to ensure the balance between these tasks in order to improve the performance and avoid waste of resources, such as extra memory usage due to large queues of tuples waiting to be merged.
 
 
 % processing models
@@ -279,7 +279,7 @@ Stream Processing is only one among a series of systems developed for processing
 \begin{itemize}
 \item \textbf{Active databases} rely on ECA (Event-Condition-Action) rules in order to capture events, the surrounding conditions and the actions to be taken in case the conditions are met. Current DBMSs implement these active database features with \emph{triggers} defined using SQL.
 
-\item \textbf{Continuous Queries} are known as \emph{standing} queries as opposed to relational database queries (\emph{snapshot} queries), because they continuosly monitor incoming information, producing a stream of results. A CQ is composed of a \emph{query}, a \emph{trigger} which will activate the query, and a \emph{stop condition} which will determine when the query should stop to compute updates.
+\item \textbf{Continuous Queries} are known as \emph{standing} queries as opposed to relational database queries (\emph{snapshot} queries), because they continuously monitor incoming information, producing a stream of results. A CQ is composed of a \emph{query}, a \emph{trigger} which will activate the query, and a \emph{stop condition} which will determine when the query should stop to compute updates.
 
 \item \textbf{Publish-subscribe} system is composed of \emph{publishers} that produce data and \emph{subscribers} that consume that data in the form of messages. The components of a pub-sub system have no knowledge of each other, and the delivery of message lies upon a \emph{broker network} composed of brokers nodes. There are two categories of pub-sub systems defined accordingly to how consumers subscribe to data.
 
@@ -299,7 +299,7 @@ Among the first SPSs developed the most notable are the TelegraphCQ, developed a
 
 The \emph{second generation} went a step further, with systems working on very large networks, mainly for processing data from sensor networks, which means that the processing must occur in a distributed fashion.
 
-In this period a lot of research was built on all aspects surrounding SPSs, such as job and resource management, scheduling, load balancing, high availability, monitoring, fault tolerance, QoS, visualization, stream algorithms and query languages. In comparison with the the first geeration, now the systems have a much wider range of operators, as well as the hability to build custom operators. Examples from this generation are: Borealis, CEDR, System S and CAPE.
+In this period a lot of research was built on all aspects surrounding SPSs, such as job and resource management, scheduling, load balancing, high availability, monitoring, fault tolerance, QoS, visualization, stream algorithms and query languages. In comparison with the the first generation, now the systems have a much wider range of operators, as well as the ability to build custom operators. Examples from this generation are: Borealis, CEDR, System S and CAPE.
 
 In the \emph{third generation} there is a shift towards massively-parallel systems, working on clusters instead of very large networks. These systems also favor general purpose languages instead of DSLs (Domain Specific Languages), giving the developer a wide range of possibilities for building applications. The focus is now on processing large volumes of data as fast as possible using clusters of computing nodes, usually with Cloud Computing. Examples from the third generation are: S4, Storm, Spark Streaming, Flink Streaming, Samza and Apex.
 
@@ -314,7 +314,7 @@ In the \emph{third generation} there is a shift towards massively-parallel syste
 \section{Operator Placement and Load Balancing}
 \label{sec:esp:scheduling_load_balancing}
 
-Meeting QoS requirements is not an easy task as it usually involves balancing aspects that most of the time work against each other. In a environment where data can present bursts of volume, a system has to be able to cope with it, while maintaining the stablished QoS.
+Meeting QoS requirements is not an easy task as it usually involves balancing aspects that most of the time work against each other. In a environment where data can present bursts of volume, a system has to be able to cope with it, while maintaining the established QoS.
 
 In an SPS, the operators of a query will be spread across multiple computing nodes, thus meeting the QoS requirements means finding a good operator placement and since stream loads can greatly vary along time, these systems should also employ good load balancing techniques.
 
@@ -322,7 +322,7 @@ In an SPS, the operators of a query will be spread across multiple computing nod
 
 The processing graph is considered the logical representation of the query which will be used by the scheduler in the placement of operators. The mapping of operators to computing nodes will create the physical representation of the query, where the vertices now represent the nodes \cite{kossmann2000state, lei2012robust}.
 
-One of the main differences in the way the scheduler works depends on the type of \textbf{load partitioning} supported by the system \cite{johnson2008query}. \textbf{Data stream partitioning} allows an operator to be placed in several nodes, distributing the load among them. Whereas in \textbf{query plan partitioning} one operator can live only in one node, with the disavantage that if an operator consumes more resources then a machine can offer, the only solution is to upgrade the machine or apply some technique of admission control.
+One of the main differences in the way the scheduler works depends on the type of \textbf{load partitioning} supported by the system \cite{johnson2008query}. \textbf{Data stream partitioning} allows an operator to be placed in several nodes, distributing the load among them. Whereas in \textbf{query plan partitioning} one operator can live only in one node, with the disadvantage that if an operator consumes more resources then a machine can offer, the only solution is to upgrade the machine or apply some technique of admission control.
 
 Following the taxonomy defined by Casavant and Kuhl \cite{casavant1988taxonomy} another important aspect of schedulers for DSPSs is the time at which the operator placement is made (\textbf{statically} or \textbf{dynamically}). Giving the variable nature of data streams most schedulers proposed in the literature approach the problem with a initial operator placement and an online load balancing, with special attention to the management of bursts.
 
@@ -330,11 +330,11 @@ More recently a taxonomy was proposed \cite{lakshmanan2008placement} specificall
 
 \begin{itemize}
     \item \textbf{Architecture}: whether is an \emph{independent module} from the system, a \emph{distributed} one with each node executing an instance of it, or an \emph{hybrid} of both approaches.
-    \item \textbf{Algorithm Structure}: if the algorithm has knowledge of the entire network's state it is \emph{centralized}, otherwise it is \emph{descentralized}, using only local knowledge to make decisions.
+    \item \textbf{Algorithm Structure}: if the algorithm has knowledge of the entire network's state it is \emph{centralized}, otherwise it is \emph{decentralized}, using only local knowledge to make decisions.
     \item \textbf{Metrics}: used in the objective functions in order to optimize the placement of operators. Commonly used metrics are the \emph{load}, \emph{latency}, \emph{bandwidth}, \emph{machine resources} and \emph{operator importance}.
     \item \textbf{Operator-Level Operations}: describes the operations supported by the operators in order to improve the performance of the operator placement algorithm, such as reusing an operator that appears in more than one query (\emph{operator reuse}) and replicating one operator to improve the performance (\emph{replication}).
     \item \textbf{Reconfiguration}: ability of the algorithm to adapt in order to cope with changes in the network, input rate or application components.
-    \item \textbf{Response Strategies}: some algorithms requires the application to stop in order for a new placement to be calculated, while other algortihms can dynamically respond to changes by migrating operators or redistributing the load among the operators or, if possible, using some technique such as \emph{load shedding}.
+    \item \textbf{Response Strategies}: some algorithms requires the application to stop in order for a new placement to be calculated, while other algorithms can dynamically respond to changes by migrating operators or redistributing the load among the operators or, if possible, using some technique such as \emph{load shedding}.
     \item \textbf{Change Triggers}: operator migration can be triggered if certain performance threshold has been trespassed, a constraint has been violated, or by periodically checking if the gain from migrating an operator is greater that the cost of moving it.
 \end{itemize}
 
@@ -366,7 +366,7 @@ It has to guarantee that the state of the system is consistent and that all mess
 
 \textbf{Upstream backup} requires a node to save the tuples it is sending to downstream nodes in a queue until the downstream nodes have processed them (\emph{ack} messages). In case of a failure the node can send the tuples again. It can become a problem if the size of the queue grows outside the main memory.
 
-\textbf{Recovery} is classified as \emph{precise}, when all tuples not processed by the downstream nodes are sent, the failure is completely masked (except for the delay in processing); on \emph{rolback} recovery the output may be different from that of a failure-free execution as some tuple may be duplicated; and in \emph{gap} recovery some tuples may be lost in order to reduce the recovery time.
+\textbf{Recovery} is classified as \emph{precise}, when all tuples not processed by the downstream nodes are sent, the failure is completely masked (except for the delay in processing); on \emph{roll-back} recovery the output may be different from that of a failure-free execution as some tuple may be duplicated; and in \emph{gap} recovery some tuples may be lost in order to reduce the recovery time.
 
 
 \section{Message Systems}
@@ -381,7 +381,7 @@ Systems such as S4 used to rely solely on TCP, changing later to the Netty libra
 \section{Platforms}
 \label{sec:esp:platforms}
 
-In this section the most proeminent SPSs in the open source market are described. It is assumed that the basic concepts of stream processing are known (Section \ref{sec:esp:concepts}). The descriptions focuses mainly o programming and architectural characteristics. At the last section there is a qualitative comparison of the platforms, highlighting their similarities and differences.
+In this section the most prominent SPSs in the open source market are described. It is assumed that the basic concepts of stream processing are known (Section \ref{sec:esp:concepts}). The descriptions focuses mainly o programming and architectural characteristics. At the last section there is a qualitative comparison of the platforms, highlighting their similarities and differences.
 
 \subsection{Storm}
 
@@ -417,7 +417,7 @@ In Figure \ref{fig:storm_running_topology} it is possible to see an example of a
 	\label{fig:storm_running_topology}
 \end{figure}
 
-A Storm cluster (Figure \ref{fig:storm_cluster}) is composed of one \emph{Nimbus} (the master) and a set of \emph{supervisors} (the workers). The Nimbus is resposible for assigning work to supervisors, as well as starting and stopping workers accordingly; managing failures; and monitoring resource usages \cite{heinze2014cloud}. Supervisors have a parameter called \emph{slots}, which is the maximum number of workers that they can execute \cite{aniello2013adaptive}. The coordination between the Nimbus and the supervisors relies on a Zookeeper cluster. Moreover, all state of the nodes is kept on Zookeeper in order to avoid data loss in case of a failure, enabling nodes to restart after a failure and continue from where they left off \cite{storm2015docs}.
+A Storm cluster (Figure \ref{fig:storm_cluster}) is composed of one \emph{Nimbus} (the master) and a set of \emph{supervisors} (the workers). The Nimbus is responsible for assigning work to supervisors, as well as starting and stopping workers accordingly; managing failures; and monitoring resource usages \cite{heinze2014cloud}. Supervisors have a parameter called \emph{slots}, which is the maximum number of workers that they can execute \cite{aniello2013adaptive}. The coordination between the Nimbus and the supervisors relies on a Zookeeper cluster. Moreover, all state of the nodes is kept on Zookeeper in order to avoid data loss in case of a failure, enabling nodes to restart after a failure and continue from where they left off \cite{storm2015docs}.
 
 \begin{figure}[!ht]
 	\centering
@@ -435,7 +435,7 @@ When the Nimbus receives a topology it has to use a scheduler in order to assign
 	\label{fig:storm_default_scheduler}
 \end{figure}
 
-Storm guarantees that all messages emitted by the spouts will be fully processed by keeping them on a queue until the confirmation that they have been processed, and in case a message has failed the spout will send it again \cite{gradvohl2014comparing}. To understand what "fully processed" means in Storm a simple example can be seen in Figure \ref{fig:storm_event_tracking}, it shows the \emph{tuple tree} which is composed of the orginal tuple and all tuples originated from that first tuple. After a tuple is processed in a bolt it is \emph{ack}'ed, after all tuples in the tuple tree have been ack'ed the message is considered fully processed.
+Storm guarantees that all messages emitted by the spouts will be fully processed by keeping them on a queue until the confirmation that they have been processed, and in case a message has failed the spout will send it again \cite{gradvohl2014comparing}. To understand what "fully processed" means in Storm a simple example can be seen in Figure \ref{fig:storm_event_tracking}, it shows the \emph{tuple tree} which is composed of the original tuple and all tuples originated from that first tuple. After a tuple is processed in a bolt it is \emph{ack}'ed, after all tuples in the tuple tree have been ack'ed the message is considered fully processed.
 
 \begin{figure}[!ht]
 	\centering
@@ -508,7 +508,7 @@ The \emph{Job Scheduler} (Figure \ref{fig:spark_architecture} \subref{fig:spark_
 
 \subsection{Samza}
 
-Samza is a framework for distributed stream processing built around Kafka. In Samza an operator is a \emph{job}, it can subscribe and publish to one or more streams. The parallelism is defined by the number of partitions of the Kafka's topic that the job subcribes to (if multiple topics, the one with more partitions). 
+Samza is a framework for distributed stream processing built around Kafka. In Samza an operator is a \emph{job}, it can subscribe and publish to one or more streams. The parallelism is defined by the number of partitions of the Kafka's topic that the job subscribes to (if multiple topics, the one with more partitions). 
 
 A job is then broken down into \emph{tasks}, each one responsible for consuming data from one or more partitions, that operates independently of each other \cite{ramesh2015samza}. These tasks will be executed by \emph{Task Runners}.
 
@@ -599,6 +599,12 @@ The \textbf{delivery guarantees} on the other hand are closely related to the \t
 \end{center}
 \end{table}
 
+\subsection{Other Platforms}
+
+In the last three years a lot of platforms have been created or gained a lot of attention. Among those Flink and its streaming module is one of the most prominent. It is an open source distributed batch and stream processing platform. It's streaming engine has the record-at-a-time processing model with exactly-once delivery guarantees and support for state persistence.
+
+
+
 \section{Performance Evaluation}
 \label{sec:esp:performance_evaluation}
 
@@ -607,8 +613,9 @@ Of interest of this work are benchmarks specifically designed for SPSs, comparis
 In the end, in Section \ref{subsec:esp:metrics}, a summary of the metrics employed by each of the related works is given, as a way to find a consensus.
 
 \subsection{Benchmarks}
+\label{subsec:esp:benchmarks}
 
-The first benchmark designed specifically for stream processing systems that can be found in the literature is the Linear Road Benchmark \cite{arasu2004linear}, adopted by the Aurora \cite{abadi2003aurora} and STREAM \cite{arasu2004stream} systems. It simulates a toll system in a ficticious city with the purpose of calculating the toll value based on traffic jam and accident proximity, charging drivers greater values when there's more congestion as a way to discourage them from using the roads. In this simulation there are express ways composed of four lanes, with vehicles reporting their position every 30 seconds and accidents happening in random locations every 20 minutes. The purpose of the benchmark is to determinate the maximum L factor (number of express ways) that a system can process without violating the response time and precision requirements. The queries defined by the benchmark are: accident detection, traffic congestion measurement, toll calculation and historical queries. At the end of the paper a comparison between a relational DBMS and Aurora is presented, with a measured L factor of 0.5 and 2.5, respectively.
+The first benchmark designed specifically for stream processing systems that can be found in the literature is the Linear Road Benchmark \cite{arasu2004linear}, adopted by the Aurora \cite{abadi2003aurora} and STREAM \cite{arasu2004stream} systems. It simulates a toll system in a fictitious city with the purpose of calculating the toll value based on traffic jam and accident proximity, charging drivers greater values when there's more congestion as a way to discourage them from using the roads. In this simulation there are express ways composed of four lanes, with vehicles reporting their position every 30 seconds and accidents happening in random locations every 20 minutes. The purpose of the benchmark is to determinate the maximum L factor (number of express ways) that a system can process without violating the response time and precision requirements. The queries defined by the benchmark are: accident detection, traffic congestion measurement, toll calculation and historical queries. At the end of the paper a comparison between a relational DBMS and Aurora is presented, with a measured L factor of 0.5 and 2.5, respectively.
 
 %Besides the Linear Road Benchmark, the only benchmarks found in the literature that are designed for stream processing are aimed at very specific cases, as is the case of PLR \cite{karachi2012plr} which is an extension of the Linear Road for probabilistic DSMSs, and the SRBench \cite{zhang2012srbench} that defines a set of queries for the comparison of Streaming RDF/SPARQL (strRS) engines.
 
@@ -618,11 +625,11 @@ Besides the Linear Road Benchmark, there are benchmarks for SPSs that are aimed 
 
 % StreamBench
 
-The first benchmark suite for SPSs is StreamBench \cite{lu2014stream}. It proposes a set of seven applications for the workload, based on three dimensions of requirements for stream processing: \emph{data type}, \emph{workload complexity} and \emph{use of historical data}. The benchmark also defines four aspects that are going to be measured: \emph{performance}, with the input rate at its maximum with four input scales (5M, 10M, 20M and 50M); \emph{multi-recipient performance}, where the input scale is fixed but the number of nodes in the cluster that receive the input data varies (single node, half of the nodes and all nodes of the cluster); \emph{fault tolerance}, with half of the nodes as recipients, it consists on failing one non-recipient node and measuring the performance under failure and comparing to a failure free experiment; \emph{durability}, uses only one application with 10K and 1M records per minute during 2 days, and measures the percentage of available time of the framework.
+The first benchmark suite for the 3rd generation of SPSs is StreamBench \cite{lu2014stream}. It proposes a set of seven applications for the workload, based on three dimensions of requirements for stream processing: \emph{data type}, \emph{workload complexity} and \emph{use of historical data}. The benchmark also defines four aspects that are going to be measured: \emph{performance}, with the input rate at its maximum with four input scales (5M, 10M, 20M and 50M); \emph{multi-recipient performance}, where the input scale is fixed but the number of nodes in the cluster that receive the input data varies (single node, half of the nodes and all nodes of the cluster); \emph{fault tolerance}, with half of the nodes as recipients, it consists on failing one non-recipient node and measuring the performance under failure and comparing to a failure free experiment; \emph{durability}, uses only one application with 10K and 1M records per minute during 2 days, and measures the percentage of available time of the framework.
 
 The applications that compose the benchmark suite are: \emph{identity}, \emph{sample}, \emph{projection}, \emph{grep}, \emph{word count}, \emph{distinct count} and \emph{statistics}. Six of them work with text data types and one with numeric data type, four of them have only a single operator and are stateless. One shortcoming of this benchmark suite is that all applications are synthetic, leaving aside more complex operations and communication patterns that only occur with more complex data flow graphs. It's worth noting that the authors acknowledge this fact.
 
-The datasets used by the benchmark suite are from real world scenarios and they use them as seed for data generation. The seed data should be pre-loaded in memory in order to increase the performance as the data generation speed should be superior to the data consumption. The generated data, according to the proposed architecture, is feeded into a message system, decoupling the data generation from data consumption. It is also necessary that the message system should have a serving speed superior from the consumption speed. The authors claim that even if the SPSs could achieve greater throughput without a message system, by beign the common data transport for all experiments it results in a fair comparison.
+The datasets used by the benchmark suite are from real world scenarios and they use them as seed for data generation. The seed data should be pre-loaded in memory in order to increase the performance as the data generation speed should be superior to the data consumption. The generated data, according to the proposed architecture, is feeded into a message system, decoupling the data generation from data consumption. It is also necessary that the message system should have a serving speed superior from the consumption speed. The authors claim that even if the SPSs could achieve greater throughput without a message system, by being the common data transport for all experiments it results in a fair comparison.
 
 As most of the works below, they chose the \textbf{average} \emph{throughput} and \emph{latency} as main metrics, and the penalties incurred from failures in this two metrics. They have done experiments to compare Storm and Spark Streaming in a cluster of 6 nodes, using Apache Kafka as the message system in a cluster of 6 nodes, with 5 of them as brokers. They fail, however, to present the standard deviation of the results measured, something essential for the comparison of systems known for their high variability in latency and throughput.
 
@@ -635,7 +642,7 @@ Another benchmark for SPSs was Yahoo Streaming Benchmark \cite{yahoo2015bench}, 
 
 % BigDataBench \cite{wang2014bigdatabench}
 % BigDataBench has five applications for the evaluation of streaming systems: grep, search, rolling top words, k-means and collaborative filtering (for e-commerce).
-A later work on bechmarking Big Data systems is BigDataBench \cite{wang2014bigdatabench}, with a wide range of applications from multiple areas. It also has a subset of five micro-benchmarks specific for streaming systems: \textit{grep}, \textit{search}, \textit{rolling top words}, \textit{k-means} and \textit{collaborative filtering} (for e-commerce).
+A later work on benchmarking Big Data systems is BigDataBench \cite{wang2014bigdatabench}, with a wide range of applications from multiple areas. It also has a subset of five micro-benchmarks specific for streaming systems: \textit{grep}, \textit{search}, \textit{rolling top words}, \textit{k-means} and \textit{collaborative filtering} (for e-commerce).
 
 It provides the specification of all benchmark applications as well as the data inputs, but it is not a framework in the sense that it does not provide an API that can be extended for building new benchmarks. The micro-benchmarks have been implemented for JStorm and Spark.
 
@@ -708,11 +715,11 @@ Heinze et al \cite{heinzeelastic} evaluates a query allocator on top of a distri
 
 In a correlated subject, Le-Phuoc et al \cite{le2012linked, le2013elastic} proposes a framework for the evaluation of LSD engines (Linked Stream Data, e.g. RDF stream data model). Their work includes a methodology for data generation, system testing and analysis of results. The tests defined by the framework fall into one of the three categories: functionality, correctness and performance tests. Functionalities are covered through queries of increasing complexity, and the results assert if the functionality is supported by the engine or not. The correctness tests evaluates the output of a query for all engines given the same input and configuration. In cases of mismatch between the outputs of different engines, a function for calculating the percentage of mismatch is employed. In the performance tests the main metric is throughput, but in the case of LSD engines, as the input rate increases the system may drop some tuples (load shedding), which could lead to wrong results. To circumvent this problem, the authors proposed the comparable maximum execution throughput.
 
-Similar to the work described above, \cite{scharrenbach2013seven} gives a few insights into how to benchmark SFP (Semantic Flow Processing, i.e. LSD engines) systems. Of interest to this work is the three KPIs they have defined, namingly: the response time, measured by the average, xth percentile or the maximum; maximum input throughput per unit of time; and other metrics including recall (reprocessing a lost tuple), precision and error rate.
+Similar to the work described above, \cite{scharrenbach2013seven} gives a few insights into how to benchmark SFP (Semantic Flow Processing, i.e. LSD engines) systems. Of interest to this work is the three KPIs they have defined, they are: the response time, measured by the average, xth percentile or the maximum; maximum input throughput per unit of time; and other metrics including recall (reprocessing a lost tuple), precision and error rate.
 
 %%
 
-In 2007, Bizarro \cite{bizarro2007bicep} proposed the BiCEP project, a benchmark for CEP engines. The paper identified the categories of applications for CEP engines based on publications from a few conferences. It also defined a set of metrics: \emph{response time}; \emph{scalability}, broken down into \textbf{scale-up} (increase system and load), \textbf{speed-up} (increase system, maintain load) and \textbf{load-up} (maintain system, increase load); \emph{adaptivity}, which observes the behavior of the engine in the face of changes in input rate, bursts in event arrival, system overloads and instability; \emph{computation sharing}, that evaluates the ability of the engine to have multiple queries running concurrently; \emph{precision} and \emph{recall}.
+In 2007, Bizarro \cite{bizarro2007bicep} proposed the BiCEP project, a benchmark for CEP engines. The paper identified the categories of applications for CEP engines based on publications from a few conferences. It also defined a set of metrics: \emph{response time}; \emph{scalability}, broken down into \textbf{scale-up} (increase system and load), \textbf{speed-up} (increase system, maintain load) and \textbf{load-up} (maintain system, increase load); \emph{adaptivity}, which observes the behaviour of the engine in the face of changes in input rate, bursts in event arrival, system overloads and instability; \emph{computation sharing}, that evaluates the ability of the engine to have multiple queries running concurrently; \emph{precision} and \emph{recall}.
 
 In continuation to the BiCEP project, Mendes, Bizarro and Marques \cite{mendes2008framework} developed a framework for the performance evaluation of CEP systems called FINCoS. The framework is language-agnostic, in the sense that it can be used with any CEP product; and workload-agnostic, enabling the use of any dataset and queries to evaluate a set of engines. The architecture of the framework is composed of drivers that simulate streams of events, sinks that are going to receive the output from the CEP engine, the controller used by the user to configure the environment (number of drivers and sinks, rate of events, number of machines), the adapters that translate the input and output between the CEP engine and the standard format, and the validators that check the output results as well as performance metrics (e.g. response time).
 
@@ -778,10 +785,21 @@ The Table \ref{table:related_work_metrics} summarizes the metrics used by the wo
 \end{center}
 \end{table*}
 
+\subsection{Evaluation of the Existing Benchmarks}
+\label{subsec:esp:evaluation_existing_benchmarks}
+
+Of the benchmarks designed specifically for SPSs, described on Section \ref{subsec:esp:benchmarks}, they either focus on a single real-world application or they use a set of synthetic/micro-benchmark applications.
+
+None of these works does a workload characterization of the applications that are part of the benchmark. This is essential in order to differentiate the applications that compose the benchmark and ensure that each application has a different set of behaviours.
+
+These works also don't evaluate the relevance of those applications in the stream processing area. Having a diverse set of applications from multiple areas is important for the evaluation of the best platform for a type of application.
+
+Another shortcoming of these works is that, for those that propose a framework for benchmarking, the applications need to implemented on each platform, as opposed to the architecture proposed on this work that aims at a single API for application development (and engines for each platform).
+
 \section{Workload Characterization}
 \label{sec:esp:workload_characterization}
 
-According to Bienia et al \cite{bienia2008parsec} the relevance of a benchmark suite depends on the applications selected, as they need to represent the most significant use cases as well as a broad and diverse range of behaviors.
+According to Bienia et al \cite{bienia2008parsec} the relevance of a benchmark suite depends on the applications selected, as they need to represent the most significant use cases as well as a broad and diverse range of behaviours.
 
 The characterization of applications therefore plays a key role in the selection of the workloads of a benchmark suite. In a paper by Balaprakash et al \cite{balaprakash2013exascale}, three techniques are employed in the characterization of applications: performance measurement, instrumentation and source code analysis. They use them to determine the instruction mix and memory access patterns for a set of scientific applications and extrapolate the results for exascale workloads per statistical models. Application characteristics can also be obtained from traces of production environments \cite{khan2012workload}.
 
@@ -832,7 +850,7 @@ The concepts and research approached on the sections above, together with the re
 \chapter{Model}
 \label{chapter:model}
 
-This chapter describes the methodology defined for the benchmark, including a set of main metrics to be measured as well as some auxiliar metrics, the set of applications that compose the benchmark suite with an overview of each one of those applications, followed by a workload characterization of them.
+This chapter describes the methodology defined for the benchmark, including a set of main metrics to be measured as well as some auxiliary metrics, the set of applications that compose the benchmark suite with an overview of each one of those applications, followed by a workload characterization of them.
 
 In the end we describe the datasets selected for each one of those application as well as a suggestion for the configurations, based on the workload characterization.
 
@@ -882,9 +900,9 @@ Previous works \cite{dayarathna2011performance, akidau2013millwheel, castro2013i
 
 As opposed to the latency, the majority of related works measure the average or maximum throughput of an SPS. The reality is that some systems favor throughput over latency, while others may favor latency, or seek a middle ground. But to get a better picture of the relationship of the throughput with the latency, it is necessary to analyse the throughput over time slots instead of the whole runtime and put it side by side with the latency.
 
-The throughput is measured at each operator by counting the number of processed tuples per time unit. In order to compare the throughput of different systems we use, in addition to the average, the 5th percentile, the latter also used in the measurement of network performance \cite{litjens2010potential, landstrom2011deployment}, which is interested in the lower end of throughput. SPSs reagarding this aspect have similar requirements, making the 5th percentile a good throughput metric for it.
+The throughput is measured at each operator by counting the number of processed tuples per time unit. In order to compare the throughput of different systems we use, in addition to the average, the 5th percentile, the latter also used in the measurement of network performance \cite{litjens2010potential, landstrom2011deployment}, which is interested in the lower end of throughput. SPSs regarding this aspect have similar requirements, making the 5th percentile a good throughput metric for it.
 
-\textbf{Scalability}. The scalability will be evaluated by increasing the number of computing nodes as well as the number of instances for each operator, and analyzing the behavior of the other metrics in face of these changes. As the amount of combinations possible for the number of instances of each operator is overwhelming, we will rely on the workload characteristics of each application to define a base value for each operator, with a multiplier value as factor. Ideally, the total number of instances for the operators should be such that there is one instance per node up to the same number of cores in a node, as the best speedup is usually achieved at one process per processing core \cite{ravi2009performance, chai2007understanding}.
+\textbf{Scalability}. The scalability will be evaluated by increasing the number of computing nodes as well as the number of instances for each operator, and analyzing the behaviour of the other metrics in face of these changes. As the amount of combinations possible for the number of instances of each operator is overwhelming, we will rely on the workload characteristics of each application to define a base value for each operator, with a multiplier value as factor. Ideally, the total number of instances for the operators should be such that there is one instance per node up to the same number of cores in a node, as the best speedup is usually achieved at one process per processing core \cite{ravi2009performance, chai2007understanding}.
 
 \textbf{Tuple Loss}. Measuring the number of lost tuples is important to ensure that the system is behaving correctly. Some systems may count the lost tuples as part of the throughput, leading to wrong conclusions. Other systems have fault tolerance mechanisms that prevent tuple losses, which in turn will incur into \emph{recovery time}. This metric can be calculated by storing at each operator the number of tuples received and emitted. At the end of the execution an operator should have received all tuples emitted by the upstream operators, otherwise there was loss of tuples.
 
@@ -1058,7 +1076,7 @@ Receives resource usage readings from computer in a network, calculates the Eucl
 
 \subsection{Sentiment Analysis (SA)}
 
-The \emph{Sentiment Analysis} application uses a simple NLP technique for calculating the sentiment of sentences, consisting of counting positive and negative words adn using the difference to indicate the polarity of the sentence.
+The \emph{Sentiment Analysis} application uses a simple NLP technique for calculating the sentiment of sentences, consisting of counting positive and negative words and using the difference to indicate the polarity of the sentence.
 
 The application receives a stream of \emph{tweets} in the JSON format, each \emph{tweet} corresponds to an event that has to be parsed in order to extract the relevant fields, in this case the \emph{ID} of the tweet, the \emph{language} and the \emph{message}.
 
@@ -1096,7 +1114,7 @@ The advantage of this approach is that the recovery of an operator after a failu
 
 Extracts topics from a stream of \textit{tweets}, count the occurrences for each topic in a window of events (limited size) and emits only the popular topics (i.e. the trending topics).
 
-The occurrences of topics is tracked by a sliding window wich is advanced in a fixed interval of time. The use of a sliding window reduces the memory usage since only recent events are stored, it also makes since because the application is interested in detecting only new trends. To increase scalability an \emph{Intermediate Ranking} operator is used to rank a subset of topics, and in a fixed interval of time these intermediate rankings are sent to the \emph{Total Ranking} operator, which will merge the intermediate rankings and emit the final ranking of topics, i.e. the trending topics.
+The occurrences of topics is tracked by a sliding window which is advanced in a fixed interval of time. The use of a sliding window reduces the memory usage since only recent events are stored, it also makes since because the application is interested in detecting only new trends. To increase scalability an \emph{Intermediate Ranking} operator is used to rank a subset of topics, and in a fixed interval of time these intermediate rankings are sent to the \emph{Total Ranking} operator, which will merge the intermediate rankings and emit the final ranking of topics, i.e. the trending topics.
 
 An example of such application is the TwitterMonitor \cite{mathioudakis2010twittermonitor}, a system that detects trends in real-time from Twitter. This application is also used to compare the performance of a traffic monitoring and analysis tool called BlockMon \cite{simoncelli2013scaling} with Storm and Apache S4.
 
@@ -1168,7 +1186,7 @@ An application that seeks stocks that are for sell in quantity and with prices b
 	\label{fig:app_bargain_index}
 \end{figure}
 
-The dataflow of the bargain index application, seen in Figure \ref{fig:app_bargain_index}, receives as input TAQ (Trade and Quote) records, where a \emph{trade} is a transaction that already ocurred and it is characterized by the price of the stock and the amount that was sold/bought. Whereas a \emph{quote} transaction can be a \emph{bid} or an \emph{ask}, the first being issued by someone who is looking to buy stocks and the second by someone trying to sell them. The \emph{source} component receives both types of transactions and splits them into two different data streams.
+The dataflow of the bargain index application, seen in Figure \ref{fig:app_bargain_index}, receives as input TAQ (Trade and Quote) records, where a \emph{trade} is a transaction that already occurred and it is characterized by the price of the stock and the amount that was sold/bought. Whereas a \emph{quote} transaction can be a \emph{bid} or an \emph{ask}, the first being issued by someone who is looking to buy stocks and the second by someone trying to sell them. The \emph{source} component receives both types of transactions and splits them into two different data streams.
 
 With the stream of trading transactions the first component calculates the product of $P$ (price) and $V$ (volume). The second component does the summation of a sliding window of 15 tuples ($\sum_{i=1}^{W_{size}}P_{i}V_{i}$), with $Advance = 1$. The next component calculates the Volume-Weighted Average Price (VWAP), one of the main metrics for evaluating the performance of a trade \cite{di2010applications, kim2010electronic}, as follows
 
@@ -1188,7 +1206,7 @@ bargainIndex =
 
 \subsection{Reinforcement Learner (RL)}
 
-Concepts at \cite{strehl2008analysis}.
+%Concepts at \cite{strehl2008analysis}.
 
 An example of such application is in the paper the introduces the S4 system \cite{neumeyer2010s4}, which uses an application that consumes events coming from a search advertising system, measures its performance under the current parameters and applies an adaptation algorithm to determine new parameters for improving the advertising performance.
 
@@ -1199,23 +1217,28 @@ An example of such application is in the paper the introduces the S4 system \cit
 	\label{fig:app_reinforcement_learner}
 \end{figure}
 
+The \textit{reinforcement learner} operator uses the interval estimate \cite{strehl2008analysis} algorithm and to choose the action to take it uses second order statistics of the reward distribution.
+
+The algorithm can be characterized by two phases: exploration and exploitation. In the beginning the reward distribution does not have enough data, so the the algorithm will choose actions randomly. When enough data is available, the exploitation phase begins, with the algorithm choosing actions with the highest mean reward.
+
 \subsection{Smart Grid Monitoring (SM)}
 
 Monitoring of energy consumption for load prediction and outlier detection. The application was proposed in the DEBS 2014 Grand Challenge\footnote{http://www.cse.iitb.ac.in/debs2014/?page\_id=42}.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{images/apps/SmartGrid.pdf}
 	\caption{Data flow of the Smart Grid Monitoring application.}
 	\label{fig:app_smart_grid}
 \end{figure}
 
+The application produces two results: outliers per house and house/plug load predictions. The outlier detection is done by first calculating the global median of all houses and then comparing it with the median of each house plug (values above global median are considered outliers). And the prediction uses a the current average and median to predict future loads.
 
 \subsection{Telecom Spam Detection (VS)}
 
 The application (called VoIPSTREAM) detects telemarketing users by analysing call detail records (CDRs) using a set of filters based on time-decaying bloom filters \cite{bianchi2011demand}. This application is used in the evaluation of the BlockMon system \cite{huici2012blockmon}.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{images/apps/VoIPSTREAM.pdf}
 	\caption{Data flow of the VoIPSTREAM application}
@@ -1245,7 +1268,7 @@ The selectivity (see Figure \ref{fig:operator_selectivity}), as described before
 	\label{fig:tuple_size}
 \end{figure}
 
-The usual behavior for the tuple size is for it to decrease along the DAG path, which is why usually the source operator has the higher values for the tuple size. One exception can be seen in Figure \ref{fig:tuple_size} were the size of the tuples for the \emph{machine outlier} application increases along the DAG path. This happens because the original tuple is carried all the way to the end of the path while more information is aggregated. Another observation made from the experiments is that a bigger tuple size doesn't necessarily mean a higher memory usage.
+The usual behaviour for the tuple size is for it to decrease along the DAG path, which is why usually the source operator has the higher values for the tuple size. One exception can be seen in Figure \ref{fig:tuple_size} were the size of the tuples for the \emph{machine outlier} application increases along the DAG path. This happens because the original tuple is carried all the way to the end of the path while more information is aggregated. Another observation made from the experiments is that a bigger tuple size doesn't necessarily mean a higher memory usage.
 
 \begin{figure}[ht!]
     \centering
@@ -1254,11 +1277,11 @@ The usual behavior for the tuple size is for it to decrease along the DAG path, 
 	\label{fig:memory_usage}
 \end{figure}
 
-As the SPSs store all the data in memory to reduce the latency, it is important to have applications with different patterns of memory usage for the benchmark suite. In the Figure \ref{fig:memory_usage} it is possible to see the distribution of the memory usage, measured at fixed time intervals during the application execution. The x-axis shows the amount of memory (in bytes) used, while the y-axis shows the density of occurrences. The selected applications exhibit five memory behaviors: fixed and variable memory usage; and low, medium and high memory usages.
+As the SPSs store all the data in memory to reduce the latency, it is important to have applications with different patterns of memory usage for the benchmark suite. In the Figure \ref{fig:memory_usage} it is possible to see the distribution of the memory usage, measured at fixed time intervals during the application execution. The x-axis shows the amount of memory (in bytes) used, while the y-axis shows the density of occurrences. The selected applications exhibit five memory behaviours: fixed and variable memory usage; and low, medium and high memory usages.
 
 %A broad base means an application with high variation of memory usage, while a narrow one means the memory consumption remains fixed or very limited.
 
-The last characteristic observed was the time for an operator to process one tuple. The results shown in Figure \ref{fig:process_time} correspond to the 99th percentiles obtained from samples retrieved at fixed time intervals. There are applications with homogeneous processing times across operators, while others have bigger differences between operators. The higgest processing time comes from the \emph{tokenizer} operator (\emph{spam filter}), which can be explained by the high selectivity of the operator.
+The last characteristic observed was the time for an operator to process one tuple. The results shown in Figure \ref{fig:process_time} correspond to the 99th percentiles obtained from samples retrieved at fixed time intervals. There are applications with homogeneous processing times across operators, while others have bigger differences between operators. The highest processing time comes from the \emph{tokenizer} operator (\emph{spam filter}), which can be explained by the high selectivity of the operator.
 
 \begin{figure}[ht!]
     \centering
@@ -1463,9 +1486,9 @@ There is another approach that has not been used in this work, which is simulati
 
 This chapter presents the results obtained by applying the benchmark model defined on Chapter \ref{chapter:model} in the comparison of two of main stream processing systems in the market against a subset of the applications defined.
 
-The SPSs chosen were Spark and Storm as they are the most proeminent on their category and also because they have different approaches on how to handle stream data processing.
+The SPSs chosen were Spark and Storm as they are the most prominent on their category and also because they have different approaches on how to handle stream data processing.
 
-Out of the 14 applications defined, due to time restrictions to the cluster for running the experiments, 3 were chosen: word count, log processing and traffic monitoring. The first one has become a standard in Big Data bechmarks, while the second has a good set of operations applied to logs as well as having the biggest dataset available at the time. And the third application is a convergence of IoT and Big Data applied to what is know as \textit{Smart Cities}.
+Out of the 14 applications defined, due to time restrictions to the cluster for running the experiments, 3 were chosen: word count, log processing and traffic monitoring. The first one has become a standard in Big Data benchmarks, while the second has a good set of operations applied to logs as well as having the biggest dataset available at the time. And the third application is a convergence of IoT and Big Data applied to what is know as \textit{Smart Cities}.
 
 \section{Set-Up}
 \label{sec:set-up}
@@ -1510,7 +1533,7 @@ For the \textit{word count} on Storm, 52 different configurations of number of i
 
 Each configuration is identified by \textbf{n\textit{N}}\_\textbf{x\textit{Source}}\_\textbf{x\textit{Splitter}}\_\textbf{x\textit{Counter}}\_\textbf{x\textit{Sink}} which is the number of nodes and the number of instances of each operator. If only one \textbf{x\textit{X}} is defined, it means all operators have the same number of instances.
 
-When analysing the 95th percentile of latency results on Storm some experiments showed extremely high latencies asn shown on Figure \ref{fig:storm_wordcount_latency}.
+When analysing the 95th percentile of latency results on Storm some experiments showed extremely high latencies as shown on Figure \ref{fig:storm_wordcount_latency}.
 
 \begin{figure}[H]
     \centering
@@ -1630,7 +1653,7 @@ Storm    & \multirow{-2}{*}{n8\_x3\_x5\_x6\_x3} & 15670409.7215233              
 
 Latency = 95th percentile, Throughput = average, CPU and Memory Usage = average \%, Network Usage = average MBytes
 
-Analysing Table \ref{table:comparison_wordcount}, Storm did better on throughtput (won 12 out of 12 experiments), while Spark did better on latency (won 8 out of 12 experiments).
+Analysing Table \ref{table:comparison_wordcount}, Storm did better on throughput (won 12 out of 12 experiments), while Spark did better on latency (won 8 out of 12 experiments).
 
 
 
@@ -1717,7 +1740,7 @@ On the throughput for Spark (Figure \ref{fig:spark_logprocessing_throughput}) th
 	\label{fig:spark_logprocessing_throughput}
 \end{figure}
 
-And if we look only at the throughput of the sinks results were much morse, with the \textit{city counts sink} operator showing the best results of those, but still very far from the numbers that Storm was able to deliver.
+And if we look only at the throughput of the sinks results were much worse, with the \textit{city counts sink} operator showing the best results of those, but still very far from the numbers that Storm was able to deliver.
 
 \begin{figure}[H]
     \centering
@@ -1827,7 +1850,7 @@ The throughput average on Figure \ref{fig:storm_trafficmonitoring_throughput} sh
 	\label{fig:storm_trafficmonitoring_throughput}
 \end{figure}
 
-When looking at the other operators without the source on Figure \ref{fig:storm_trafficmonitoring_throughput2} it is possible to observer that the other operators deliver a verly low throughput, which is something expected for this application, as it is not always able to match a coordinate to a street in a map.
+When looking at the other operators without the source on Figure \ref{fig:storm_trafficmonitoring_throughput2} it is possible to observer that the other operators deliver a very low throughput, which is something expected for this application, as it is not always able to match a coordinate to a street in a map.
 
 The experiment with the best results was \textbf{n8\_x4} with 35 tuples per second for the three operators.
 
@@ -1914,6 +1937,17 @@ Storm    & \multirow{-2}{*}{n4\_x8\_x2\_x2} & \cellcolor[HTML]{67FD9A}9.4453125 
 
 On Table \ref{table:traffic-monitoring-results} results show that Storm did better on all experiments.
 
+
+\section{Analysis of the Results}
+
+Storm did better generally than Spark on throughput, but on latency results were more balanced between the two platforms.
+
+Regarding resource usage:
+- if spark better than storm, how was the resource usage?
+- if storm better than spark, how was the resource usage?
+
+Analysis of best configurations for each number of nodes. (table perhaps).
+
 % TODO:
 % improve the conclusion
 
@@ -1937,7 +1971,7 @@ On Table \ref{table:traffic-monitoring-results} results show that Storm did bett
 
 Event stream processing is an emerging set of technologies that already encompasses several application areas and system implementations. In this work we introduced a benchmark suite designed specifically to evaluate SPSs, with a wide variety of applications, a well defined set of metrics for the correct interpretation of results and a methodology to guarantee the quality of the results.
 
-The design and development a basic framework to help the execution and collection of results proved esssential for this kind of experiments, as a lot of data is generated and it needs to be processed, summarized and plotted into charts in order for a better understanding of the results obtained.
+The design and development a basic framework to help the execution and collection of results proved essential for this kind of experiments, as a lot of data is generated and it needs to be processed, summarized and plotted into charts in order for a better understanding of the results obtained.
 
 The results from Chapter \ref{chapter:results} show that the proposed framework provides the necessary tools to properly execute, collect and compare stream processing frameworks. Specifically, the results showed that Storm has a better performance than Spark when it comes to throughput, even though Spark uses micro-batches. But on latency the results showed more balanced results between Storm and Spark.
 
