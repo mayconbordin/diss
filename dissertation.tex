@@ -88,6 +88,23 @@
 Recently a new application domain characterized by the continuous and low-latency processing of large volumes of data has been gaining attention. The growing number of applications of such genre has led to the creation of \emph{Stream Processing Systems} (SPSs), systems that abstract the details of real-time applications from the developer. More recently, the ever increasing volumes of data to be processed gave rise to distributed SPSs. Currently there are in the market several distributed SPSs, however the existing benchmarks designed for the evaluation this kind of system covers only a few applications and workloads, while these systems have a much wider set of applications. In this work a benchmark for stream processing systems is proposed. Based on a survey of several papers with real-time and stream applications, the most used applications and areas were outlined, as well as the most used metrics in the performance evaluation of such applications. With these information the metrics of the benchmark were selected as well as a list of possible application to be part of the benchmark. Those passed through a workload characterization in order to select a diverse set of applications. To ease the evaluation of SPSs a framework was created with an API to generalize the application development and collect metrics, with the possibility of extending it to support other platforms in the future. To prove the usefulness of the benchmark, a subset of the applications were executed on Storm and Spark using the Azure Platform and the results have demonstrated the usefulness of the benchmark suite in comparing these systems.
 \end{abstract}
 
+% resumo na outra língua
+% como parametros devem ser passados o titulo e as palavras-chave
+% na outra língua, separadas por vírgulas
+\begin{englishabstract}{Um Benchmark Suite para Sistemas Distribu\'{\i}dos de Stream Processing}{sistemas distribu\'{\i}dos, benchmark suite, stream processing, processamento em tempo-real, big data}
+
+Um dado por si s\'o n\~ao possui valor algum, a menos que ele seja interpretado, contextualizado e agregado com outros dados, para ent\~ao possuir valor, tornando-o uma informa\c{c}\~ao. Em algumas classes de aplica\c{c}\~oes o valor n\~ao est\'a apenas na informa\c{c}\~ao, mas tamb\'em na velocidade com que essa informa\c{c}\~ao \'e obtida. As negocia\c{c}\~oes de alta frequ\^encia (NAF) s\~ao um bom exemplo onde a lucratividade \'e diretamente proporcional a lat\^encia \cite{Loveless:2013:OAH:2507771.2507780}. Com a evolu\c{c}\~ao do hardware e de ferramentas de processamento de dados diversas aplica\c{c}\~oes que antes levavam horas para produzir resultados, hoje precisam produzir resultados em quest\~ao de minutos ou segundos \cite{barlow2013real}.
+
+Este tipo de aplica\c{c}\~ao tem como caracter\'{\i}stica, al\'em da necessidade de processamento em tempo-real ou quase real, a ingest\~ao cont\'{\i}nua de grandes e ilimitadas quantidades de dados na forma de tuplas ou eventos. A crescente demanda por aplica\c{c}\~oes com esses requisitos levou a cria\c{c}\~ao de sistemas que disponibilizam um modelo de programa\c{c}\~ao que abstrai detalhes como escalonamento, toler\^ancia a falhas, processamento e otimiza\c{c}\~ao de consultas. Estes sistemas s\~ao conhecidos como Stream Processing Systems (SPS), Data Stream Management Systems (DSMS) \cite{chakravarthy2009stream} ou Stream Processing Engines (SPE) \cite{abadi2005design}.
+
+Ultimamente estes sistemas adotaram uma arquitetura distribu\'{\i}da como forma de lidar com as quantidades cada vez maiores de dados \cite{zaharia2012discretized}. Entre estes sistemas est\~ao S4, Storm, Spark Streaming, Flink Streaming e mais recentemente Samza e Apache Beam.
+
+Estes sistemas modelam o processamento de dados atrav\'es de um grafo de fluxo com v\'ertices representando os operadores e as arestas representando os data streams. Mas as similaridades n\~ao v\~ao muito al\'em disso, pois cada sistema possui suas particularidades com rela\c{c}\~ao aos mecanismos de toler\^ancia e recupera\c{c}\~ao a falhas, escalonamento e paralelismo de operadores, e padr\~oes de comunica\c{c}\~ao.
+
+Neste sen\'ario seria \'util possuir uma ferramenta para a compara\c{c}\~ao destes sistemas em diferentes workloads, para auxiliar na sele\c{c}\~ao da plataforma mais adequada para um trabalho espec\'{\i}fico. Este trabalho prop\~oe um benchmark composto por aplica\c{c}\~oes de diferentes \'areas, bem como um framework para o desenvolvimento e avalia\c{c}\~ao de SPSs distribu\'{\i}dos.
+
+\end{englishabstract}
+
 
 % -----------------------------------------------------------------------------
 \chapter{Introduction}
@@ -131,7 +148,7 @@ This research work expects to contribute with:
 	  The benchmarks are real and from diverse areas of applications, and their workload has been characterized to ensure they have distinct behaviours. And the framework allows for applications to be executed on any supported platform, with the same set of metrics and methodologies for its collection and summarization. 
 
 \item \textbf{Define a solid set of metrics for stream processing}.\\
-	  This work aims to research all previous works, gather information on all metrics used and then define the ones that are better suited for evaluating SPSs.
+	  This work aims to research previous works, gather information on all metrics used and then define the ones that are better suited for evaluating SPSs.
 
 \item \textbf{Become a standard on SPS benchmarking}.\\
       Or at least improve the way these systems are evaluated, with higher quality benchmarks that can better show how they perform in different scenarios.
@@ -151,7 +168,7 @@ Chapter \ref{chapter:event-stream-processing} introduces the basic concepts of S
 
 On Chapter \ref{chapter:model} the model of this research is described, detailing the methodology for benchmarking SPSs on Section \ref{sec:methodology}, including the metrics that are going to be used for evaluation of these systems. On Section \ref{sec:application-selection} we describe how the selection of applications took place and then on Section \ref{sec:applications} we describe these applications in detail. In the end, at Section \ref{sec:workload-characterization}, a workload characterization of these applications is described and finally the configurations and datasets that can be used to execute these applications, on Section \ref{sec:configuration_datasets}.
 
-The results of the performance evaluation of Storm and Spark using a subset of the applications of the benchmark are on Chapter \ref{chapter:results}. In Section \ref{sec:set-up} the set-up of the environment is described, and in the subsequent sections the results in each application evaluated are shown.
+The results of the performance evaluation of Storm and Spark using a subset of the applications of the benchmark are on Chapter \ref{chapter:results}. In Section \ref{sec:set-up} the set-up of the environment is described, and in the subsequent sections the results of each application evaluated are shown.
 
 At last, in Chapter \ref{chapter:conclusion}, are the conclusions of this research as well as the final considerations and future work.
 
@@ -175,9 +192,7 @@ At last, in Chapter \ref{chapter:conclusion}, are the conclusions of this resear
 %
 
 
-This chapter introduces the requirements and concepts that govern Stream Processing Systems (SPSs), also known as Event-Stream Processing (ESP) or Stream Processing Engines (SPEs), in Sections \ref{sec:esp:requirements} and \ref{sec:esp:concepts}, respectively. Section \ref{sec:esp:history} traces the history of SPSs back to the first Data Stream Management Systems (DSMSs), Complex Event Processing systems (CEPs), Continuous Queries and Active Databases.
-
-In sequence, the architectural aspects of SPSs are explored, including techniques for scheduling and load balancing jobs and tasks within jobs to Processing Elements (PEs) (Section \ref{sec:esp:scheduling_load_balancing}), the methods employed for guaranteeing that messages are processed and the operator's state is not lost in a failure (Section \ref{sec:esp:fault_tolerance}), as well as the different data transportation middlewares and communication patterns used (Section \ref{sec:esp:data_transport}).
+This chapter introduces the requirements and concepts that govern Stream Processing Systems (SPSs), also known as Event-Stream Processing (ESP) or Stream Processing Engines (SPEs), in Sections \ref{sec:esp:requirements} and \ref{sec:esp:concepts}, respectively. Section \ref{sec:esp:history} traces the history of SPSs back to the first Data Stream Management Systems (DSMSs), Complex Event Processing systems (CEPs), Continuous Queries and Active Databases. In sequence, the architectural aspects of SPSs are explored, including techniques for scheduling and load balancing jobs and tasks within jobs to Processing Elements (PEs) (Section \ref{sec:esp:scheduling_load_balancing}), the methods employed for guaranteeing that messages are processed and the operator's state is not lost in a failure (Section \ref{sec:esp:fault_tolerance}), as well as the different data transportation middlewares and communication patterns used (Section \ref{sec:esp:data_transport}).
 
 In Section \ref{sec:esp:platforms}, the main platforms for stream processing are described in detail, with the differences among them being highlighted. And lastly, the state of the art on benchmarking and performance evaluation of SPSs is investigated (Section \ref{sec:esp:performance_evaluation}).
 
@@ -802,7 +817,7 @@ None of these works does a workload characterization of the applications that ar
 \centering
 \caption{Comparison of the Existing Benchmarks for Stream Processing}
 \label{table:benchmark_comparison}
-\begin{tabular}{ p{2cm} | p{1cm} | p{1.2cm} | p{1.2cm} | p{1.5cm} | p{1.4cm} | p{1.2cm} | p{1cm} | p{0.8cm} |}
+\begin{tabular}{ p{2cm} | p{1cm} | p{1.2cm} | p{1.2cm} | p{1.5cm} | p{1.4cm} | p{1.2cm} | p{1cm} | p{0.8cm}}
 \textbf{Benchmark}        & \textbf{Real World Applications} & \textbf{Synthetic / Micro-benchmarks} & \textbf{Metrics}                            & \textbf{Platforms}        & \textbf{Framework} & \textbf{Single API} & \textbf{Workload Characterization} & \textbf{Single API Level} \\ \hline
 Linear Road Benchmark     & 1                                & -                                     &                                             & Aurora, STREAM            & No                 & No                  & No                                 & -                         \\ \hline
 StreamBench (2014)        & -                                & 7                                     & Throughput, Latency                         & Storm, Spark              & No                 & No                  & Yes                                & -                         \\ \hline
@@ -868,13 +883,99 @@ And at section \ref{sec:esp:performance_evaluation} we have given an overview of
 
 The concepts and research approached on the sections above, together with the research introduced on section \ref{sec:esp:workload_characterization} about workload characterization were a key for the construction of the benchmark suite, depicted on the next chapter.
 
+\begin{table}[H]
+\scriptsize
+\centering
+\caption{Comparison of the Existing Benchmarks for Stream Processing}
+\label{table:benchmark_comparison_2}
+\begin{tabular}{ p{2cm} | p{1cm} | p{1.2cm} | p{1.2cm} | p{1.5cm} | p{1.4cm} | p{1.2cm} | p{1cm} | p{0.8cm}}
+\textbf{Benchmark}        & \textbf{Real World Applications} & \textbf{Synthetic / Micro-benchmarks} & \textbf{Metrics}                            & \textbf{Platforms}        & \textbf{Framework} & \textbf{Single API} & \textbf{Workload Characterization} & \textbf{Single API Level} \\ \hline
+Linear Road Benchmark     & 1                                & -                                     &                                             & Aurora, STREAM            & No                 & No                  & No                                 & -                         \\ \hline
+StreamBench (2014)        & -                                & 7                                     & Throughput, Latency                         & Storm, Spark              & No                 & No                  & Yes                                & -                         \\ \hline
+Yahoo Streaming Benchmark & 1                                & -                                     & Throughput, Latency                         & Storm, Spark, Flink, Apex & Yes                & No                  & No                                 & -                         \\ \hline
+BigDataBench              & -                                & 5                                     &                                             & JStorm, Spark             & Yes                & No                  & No                                 & -                         \\ \hline
+StreamBench (2016)        & -                                & 3                                     & Throughput, Latency                         & Storm, Spark, Flink       & Yes                & Yes                 & No                                 & High                      \\ \hline
+RIoTBench                 & -                                & 4                                     & Throughput, Latency, Resource Usage, Jitter & Storm                     & No                 & No                  & Yes                                & -                         \\ \hline
+HiBench                   & -                                & 4                                     & Latency                                     & Storm, Spark, Flink       & Yes                & No                  & No                                 & -                         \\ \hline
+
+\textbf{A Benchmark Suite for Distributed Stream Processing Systems} & \textbf{12} & \textbf{2} & \textbf{Throughput, Latency, Resource Usage, Tuple Loss} & \textbf{Storm, Spark} & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} & \textbf{Low} \\ \hline
+\end{tabular}
+\end{table}
+
+Table \ref{table:benchmark_comparison_2} shows the related benchmarks for stream processing as well as this benchmark, showing the strong points of it in comparison with other benchmarks. Mainly, the fact that this benchmarks uses mostly real world applications selected based on a thorough research of the literature as well as a workload characterization of those applications.
+
+Another strong point of this work is the fact that an API is provided for the development of applications, which makes it possible to extend the framework to add new platforms without the need to develop the same applications another time.
+
 % -----------------------------------------------------------------------------
 \chapter{Model}
 \label{chapter:model}
 
-This chapter describes the methodology defined for the benchmark, including a set of main metrics to be measured as well as some auxiliary metrics, the set of applications that compose the benchmark suite with an overview of each one of those applications, followed by a workload characterization of them.
+This chapter describes the model defined for the benchmark suite, which includes the framework with an API for developing applications; a methodology that includes a set of main metrics to be measured as well as some auxiliary metrics; the set of applications that compose the benchmark suite with an overview of each one of those applications, followed by a workload characterization of them.
 
 In the end we describe the datasets selected for each one of those application as well as a suggestion for the configurations, based on the workload characterization.
+
+\section{Proposed Framework}
+\label{subsec:proposed-framework}
+
+In order to ease the development the benchmark suite as well as the execution of experiments and analysis of results, we propose a framework for testing stream processing systems. Its architecture is comprised of the components illustrated in the Figure \ref{fig:framework_architecture}.
+
+Even though the programming model of the SPSs follows the same fundamentals, ensuring that an application has the same behaviour across these systems requires some effort. It happens mainly because each system implements the communication between operators in a different way. Storm, for example, exposes three basic communication patterns: \textbf{broadcast}, all the subscribers (instances of operators) receive all tuples; \textbf{group by field}, the same field value goes always to the same subscriber; and \textbf{shuffle}, tuples are randomly (and evenly) distributed among the subscribers.
+
+One of the purposes of this framework is to provide these patterns across all the systems. Another purpose is to enable the user to define the number of instances of each operator, i.e. the operator's parallelism. Again, with Storm that can be done in the declaration of the operator, while in Samza, for example, it is done by setting the number of partitions of a \textit{topic} in Kafka, the message system used by Samza. And with Apache S4 and Dempsy the parallelism is determined by the number of unique keys in a data stream.
+
+In another words, the main purpose of this framework is to provide a concise API for stream processing applications while ensuring that they are executed in the same way (within the system's capabilities) across the SPSs.
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=.8\textwidth]{images/architecture.jpg}
+	\caption{Test Framework Architecture}
+	\label{fig:framework_architecture}
+\end{figure}
+
+The translation of the application agnostic code to the platform-specific code is done by the \textit{adapters}. An adapter is responsible for calling the API of the specific platform and adjusting the application logic to its peculiarities.
+
+By standardizing the development of applications it became possible to insert probes in the operators and tuples for monitoring purposes. These probes can inject timestamps in the tuples in order to track the latency, they can count the number of received and sent tuples of an operator, as well as how much time is required for processing one tuple at an specific operator and subsequently calculating its instant throughput.
+
+Besides the API, the framework will also have scripts for the automation of tests and subsequent verification of results, for guaranteeing its correctness.
+
+In the Figure \ref{fig:framework_architecture} it's also possible to see the \textit{input} and \textit{output} components, as their names suggest they are responsible for feeding the applications with data streams and, at the end, storing the produced results so that they can be verified. Both components have generic APIs, making it possible to exchange them as required.
+
+In the following sections we are going to delve into the details of these components as well as the default implementations for them.
+
+\subsection{Data Input}
+
+Stream processing systems can receive data from virtually anything supported by their programming language (JVM languages for most of them). In a stream processing architecture there is usually \cite{chardonnens2013big, lim2013execution, wang2013cluster, sawant2013big} an intermediate tier between the data stream producers and the SPS (e.g. message broker, ESB, MOM) that aggregates messages and delivers them to consumer systems. This intermediate layer should balance between low-latency and high-throughput, while guaranteeing message delivery and fault tolerance.
+
+There are examples of applications using RabbitMQ \cite{yang2013big, bumgardner2014scalable}, Kafka \cite{chardonnens2013big, lim2013execution, wang2013cluster} and ActiveMQ \cite{appel2012eventlets, krawczyk2011basic} as their intermediate tier. The alternatives are broad, with implementations for JMS, AMQP, DDS, STOMP, XMPP, MQTT and OpenWire.
+
+While transitioning to a real-time activity data pipeline, LinkedIn \cite{goodhope2012building} found a few shortcomings in traditional message systems such as the focus on low-latency instead of high-volume, the rich set of delivery guarantees (per-message), the poor performance as the queues increase in size. Some of those systems also implement the push model, which can be a problem because the consumer may not have control over the rate of arrival of messages, as opposed to the pull model.
+
+To overcome it they have built Kafka \cite{kreps2011kafka}, a pub/sub message system organized in topics that are partitioned across brokers in a cluster. Topic partitions are organized as logs, that are nothing more than a set of segment files of the same size. New messages are appended to the last segment file and they are flushed only after a certain number of messages or amount of time has elapsed. Instead of acknowledging the reception of each message, Kafka only keeps track of the consumer offset in the topic partition, information that can be updated lazily by the consumer. If the consumer fails before acknowledging its position, it will only have to consume a few messages again.
+
+In a performance comparison between ActiveMQ, RabbitMQ and Kafka \cite{kreps2011kafka}, the latter one was able to achieve 400,000 messages/s while the first two message brokers were below 50,000 messages/s for the producer. For the consumer, Kafka is able to consume 22,000 messages/s on average, 4 times that of the other two systems.
+
+While choosing a message system to aggregate distributed streams of logs that amount for more than 2.75TB/day, the Wikimedia Foundation evaluated \cite{Wikimedia:2014} several alternatives, and ultimately decided to go with Apache Kafka.
+
+Ultimately, we have decided to trade strict message delivery guarantees for more performance. It means that in our tests Kafka will be providing the input streams for the applications of the benchmark suite. However, this does not prevent others from using the benchmark suite with a different message system, as one of the goals of the proposed framework is to decouple the application not only from the SPS, but also from the input source.
+
+\subsection{Output}
+
+In order to verify the results produced by the applications as well as the metrics measured (latency and throughput, for instance) some kind of storage system is required. Such system has to be able to cope with the throughput of the real-time applications.
+
+For a high throughput storage we are willing to lose some of the guarantees of traditional DBMS, as most of the applications don't have deterministic results.
+
+\cite{cooper2010benchmarking} introduces the YCSB (Yahoo! Cloud Serving Benchmark), a framework for the evaluation of the performance and scalability of cloud storage systems, using five workloads described by the distribution of records and division of operators (read, update and scan).
+
+They also apply their framework to compare Cassandra, HBase, PNUTS and a simple sharded MySQL. Results show that Cassandra and HBase are more performant at write operations, with HBase always presenting lower latencies. 
+
+At \cite{Datastax:2013} there is a comparison of Cassandra, HBase and MongoDB using the YCSB framework. Three years later it seems that Cassandra has surpassed HBase both in throughput and latency for read and update operations.
+
+In a qualitative comparison between Cassandra and HBase \cite{moniruzzaman2013nosql} both have a lot of similarities, such as the support for atomicity, consistency, lack of isolation and referential integrity, durability, secondary indexes, composite keys and horizontal scalability. On the other hand HBase has also support for transactions and revision control. But Cassandra doesn't depend on HDFS.
+
+There are in the literature two use cases of stream processing (\cite{wang2013cluster} and \cite{chardonnens2013big}) where Cassandra is used as a sink, i.e. to output the results from the application.
+
+Although there are some similarities between Cassandra and HBase, at the end it was decided that Cassandra was best suited, mainly because of the superior throughput, but also for the fact that HBase has a dependency on HDFS.
+
 
 \section{Methodology}
 \label{sec:methodology}
@@ -933,66 +1034,6 @@ The throughput is measured at each operator by counting the number of processed 
 \textbf{Tuple Loss}. Measuring the number of lost tuples is important to ensure that the system is behaving correctly. Some systems may count the lost tuples as part of the throughput, leading to wrong conclusions. Other systems have fault tolerance mechanisms that prevent tuple losses, which in turn will incur into \emph{recovery time}. This metric can be calculated by storing at each operator the number of tuples received and emitted. At the end of the execution an operator should have received all tuples emitted by the upstream operators, otherwise there was loss of tuples.
 
 \textbf{Resource Usage}. The resources to be observed are CPU, memory and network. As most SPSs keep all data in memory, monitoring its usage is essential in order to verify which system does a better job at memory management. Similarly, the network usage can tell which system has a better operator placement algorithm. The resource usage should be analysed together with the other performance metrics, as we seek a system that doesn't waste resources at the same time that it delivers a good performance.
-
-\subsection{Proposed Framework}
-\label{subsec:proposed-framework}
-
-In order to ease the development the benchmark suite as well as the execution of experiments and analysis of results, we propose a framework for testing stream processing systems. Its architecture is comprised of the components ilustrated in the Figure \ref{fig:framework_architecture}.
-
-Even though the programming model of the SPSs follows the same fundamentals, ensuring that an application has the same behavior across these systems requires some effort. It happens mainly because each system implements the communication between operators in a different way. Storm, for example, exposes three basic communication patterns: \textbf{broadcast}, all the subscribers (instances of operators) receive all tuples; \textbf{group by field}, the same field value goes always to the same subscriber; and \textbf{shuffle}, tuples are randomly (and evenly) distributed among the subscribers.
-
-One of the purposes of this framework is to provide these patterns across all the systems. Another purpose is to enable the user to define the number of instances of each operator, i.e. the operator's parallelism. Again, with Storm that can be done in the declaration of the operator, while in Samza, for example, it is done by setting the number of partitions of a \textit{topic} in Kafka, the message system used by Samza. And with Apache S4 and Dempsy the parallelism is determined by the number of unique keys in a data stream.
-
-In another words, the main purpose of this framework is to provide a concise API for stream processing applications while ensuring that they are executed in the same way (within the system's capabilities) across the SPSs.
-
-\begin{figure}[ht!]
-	\centering
-	\includegraphics[width=.8\textwidth]{images/architecture.jpg}
-	\caption{Test Framework Architecture}
-	\label{fig:framework_architecture}
-\end{figure}
-
-The translation of the application agnostic code to the platform-specific code is done by the \textit{adapters}. An adapter is responsible for calling the API of the specific platform and adjusting the application logic to its peculiarities.
-
-By standardizing the development of applications it became possible to insert probes in the operators and tuples for monitoring purposes. These probes can inject timestamps in the tuples in order to track the latency, they can count the number of received and sent tuples of an operator, as well as how much time is required for processing one tuple at an specific operator and subsequently calculating its instant throughput.
-
-Besides the API, the framework will also have scripts for the automation of tests and subsequent verification of results, for guaranteeing its correctness.
-
-In the Figure \ref{fig:framework_architecture} it's also possible to see the \textit{input} and \textit{output} components, as their names suggest they are responsible for feeding the applications with data streams and, at the end, storing the produced results so that they can be verified. In the following sections we are going to delve into the details of these components.
-
-\subsection{Data Input}
-
-Stream processing systems can receive data from virtually anything supported by their programming language (JVM languages for most of them). In a stream processing architecture there is usually \cite{chardonnens2013big, lim2013execution, wang2013cluster, sawant2013big} an intermediate tier between the data stream producers and the SPS (e.g. message broker, ESB, MOM) that aggregates messages and delivers them to consumer systems. This intermediate layer should balance between low-latency and high-throughput, while guaranteeing message delivery and fault tolerance.
-
-There are examples of applications using RabbitMQ \cite{yang2013big, bumgardner2014scalable}, Kafka \cite{chardonnens2013big, lim2013execution, wang2013cluster} and ActiveMQ \cite{appel2012eventlets, krawczyk2011basic} as their intermediate tier. The alternatives are broad, with implementations for JMS, AMQP, DDS, STOMP, XMPP, MQTT and OpenWire.
-
-While transitioning to a real-time activity data pipeline, LinkedIn \cite{goodhope2012building} found a few shortcomings in traditional message systems such as the focus on low-latency instead of high-volume, the rich set of delivery guarantees (per-message), the poor performance as the queues increase in size. Some of those systems also implement the push model, which can be a problem because the consumer may not have control over the rate of arrival of messages, as opposed to the pull model.
-
-To overcome it they have built Kafka \cite{kreps2011kafka}, a pub/sub message system organized in topics that are partitioned across brokers in a cluster. Topic partitions are organized as logs, that are nothing more than a set of segment files of the same size. New messages are appended to the last segment file and they are flushed only after a certain number of messages or amount of time has elapsed. Instead of acknowledging the reception of each message, Kafka only keeps track of the consumer offset in the topic partition, information that can be updated lazily by the consumer. If the consumer fails before acknowledging its position, it will only have to consume a few messages again.
-
-In a performance comparison between ActiveMQ, RabbitMQ and Kafka \cite{kreps2011kafka}, the latter one was able to achieve 400,000 messages/s while the first two message brokers were below 50,000 messages/s for the producer. For the consumer, Kafka is able to consume 22,000 messages/s on average, 4 times that of the other two systems.
-
-While choosing a message system to aggregate distributed streams of logs that amount for more than 2.75TB/day, the Wikimedia Foundation evaluated \cite{Wikimedia:2014} several alternatives, and ultimately decided to go with Apache Kafka.
-
-Ultimately, we have decided to trade strict message delivery guarantees for more performance. It means that in our tests Kafka will be providing the input streams for the applications of the benchmark suite. However, this does not prevent others from using the benchmark suite with a different message system, as one of the goals of the proposed framework is to decouple the application not only from the SPS, but also from the input source.
-
-\subsection{Output}
-
-In order to verify the results produced by the applications as well as the metrics measured (latency and throughput, for instance) some kind of storage system is required. Such system has to be able to cope with the throughput of the real-time applications.
-
-For a high throughput storage we are willing to lose some of the guarantees of traditional DBMS, as most of the applications don't have deterministic results.
-
-\cite{cooper2010benchmarking} introduces the YCSB (Yahoo! Cloud Serving Benchmark), a framework for the evaluation of the performance and scalability of cloud storage systems, using five workloads described by the distribution of records and division of operators (read, update and scan).
-
-They also apply their framework to compare Cassandra, HBase, PNUTS and a simple sharded MySQL. Results show that Cassandra and HBase are more performant at write operations, with HBase always presenting lower latencies. 
-
-At \cite{Datastax:2013} there is a comparison of Cassandra, HBase and MongoDB using the YCSB framework. Three years later it seems that Cassandra has surpassed HBase both in throughput and latency for read and update operations.
-
-In a qualitative comparison between Cassandra and HBase \cite{moniruzzaman2013nosql} both have a lot of similarities, such as the support for atomicity, consistency, lack of isolation and referential integrity, durability, secondary indexes, composite keys and horizontal scalability. On the other hand HBase has also support for transactions and revision control. But Cassandra doesn't depend on HDFS.
-
-There are in the literature two use cases of stream processing (\cite{wang2013cluster} and \cite{chardonnens2013big}) where Cassandra is used as a sink, i.e. to output the results from the application.
-
-Although there are some similarities between Cassandra and HBase, at the end it was decided that Cassandra was best suited, mainly because of the superior throughput, but also for the fact that HBase has a dependency on HDFS.
 
 \section{Application Selection}
 \label{sec:application-selection}
@@ -1559,7 +1600,7 @@ There is another approach that has not been used in this work, which is simulati
 
 This chapter presents the results obtained by applying the benchmark model defined on Chapter \ref{chapter:model} in the comparison of two of main stream processing systems in the market against a subset of the applications defined.
 
-The SPSs chosen were Spark and Storm as they are the most prominent on their category and also because they have different approaches on how to handle stream data processing.
+The SPSs chosen were Spark and Storm as they are the most prominent on their category and also because they have different approaches on how to handle stream data processing (tuple by tuple vs. batch).
 
 Out of the 14 applications defined, due to time restrictions to the cluster for running the experiments, 3 were chosen: word count, log processing and traffic monitoring. The first one has become a standard in Big Data benchmarks, while the second has a good set of operations applied to logs as well as having the biggest dataset available at the time. And the third application is a convergence of IoT and Big Data applied to what is know as \textit{Smart Cities}.
 
@@ -2020,6 +2061,12 @@ When it comes to resource usage on Storm, results show that experiments that did
 Spark also has a similar pattern on the resource usage, with the best results for a given number of nodes having also the higher resource usage.
 
 In the end, Storm showed higher resource usage, on the other hand it had also showed better throughput in most of the experiments when comparing with Spark.
+
+One of the key conclusions from these experiments was the importance of the correct configuration selection for each applications, based on the selectivity of the operators. Finding the best configuration might require multiple attempts, and it this work, more attempts were done for Storm than Spark. Together with the fact that the same configuration had very different behaviours on Storm and Spark, it is evident that more configurations should have been tried on Spark.
+
+The experiments executed in this work had the purpose of showing how well the benchmark proposed did on the comparison of two of the main stream processing platforms in the market. With the results above it is possible to conclude that the benchmark is able to evaluate those platforms, extracting metrics that are useful for deciding which one of them is better for each application.
+
+
 
 % TODO:
 % improve the conclusion
